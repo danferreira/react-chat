@@ -1,0 +1,8 @@
+.contact-list {
+    padding: 10px;
+}
+
+.contact-list li {
+    border-bottom: 1px solid #cdcfd2;
+    cursor: pointer;
+}

@@ -1,0 +1,60 @@
+.sidebar-header {
+    border-bottom: 1px solid #cdcfd2;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    flex: 1;
+    margin: 25px;
+    font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.dropdown {
+    display: inline-block;
+}
+
+.dropdown__content {
+    display: none;
+    position: absolute;
+}
+
+.dropdown--active .dropdown__content {
+    display: block;
+    background: #ffffff;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+    width: 200px;
+}
+
+.dropdown__content li {
+    width: 100%;
+}
+
+.dropdown__content button {
+    width: 100%;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    background: #ffffff;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+}
+
+.dropdown__content a {
+    text-decoration: none;
+    color: #000;
+}
+
+.dropdown__content a div {
+    text-align: center;
+    padding: 10px;
+}
+
+.dropdown__content a div:hover {
+    background: #f1f1f1;
+}

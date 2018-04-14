@@ -1,0 +1,55 @@
+.message {
+    word-wrap: break-word;
+    font-family: "Open Sans", sans-serif;
+    font-size: 20px;
+    margin: 10px;
+}
+
+@media screen and (max-width: 992px) {
+    .message-bubble {
+        max-width: 95%;
+    }
+}
+
+@media screen and (min-width: 993px) and (max-width: 1024px) {
+    .message-bubble {
+        max-width: 85%;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1300px) {
+    .message-bubble {
+        max-width: 75%;
+    }
+}
+
+@media screen and (min-width: 1301px) {
+    .message-bubble {
+        max-width: 65%;
+    }
+}
+
+.message:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.message-out {
+    background: #ff0;
+    border-radius: 10px 10px 0 10px;
+    float: right;
+    padding: 10px;
+}
+
+.message-in {
+    background: #fff;
+    border-radius: 10px 10px 10px 0;
+    float: left;
+    padding: 10px;
+}
+
+.message span {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+}

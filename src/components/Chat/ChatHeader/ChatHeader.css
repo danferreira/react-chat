@@ -1,0 +1,13 @@
+.chat-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 10vh;
+    background: #353838;
+    border-bottom: solid 1px #e8e8e8;
+}
+
+.chat-header .name {
+    margin: 10px;
+    color: #fff;
+}

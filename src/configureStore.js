@@ -1,0 +1,41 @@
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+import api from './api/api';
+import rootReducer from './reducers/rootReducer';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['contact', 'chat', 'form']
+}
+
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+const configureStore = () => {
+  const store = createStore(
+    persistedReducer,
+    compose(
+      applyMiddleware(thunk.withExtraArgument(api)),
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    )
+  );
+  const persistor = persistStore(store);
+
+  if (process.env.NODE_ENV !== "production") {
+
+    if (module.hot) {
+      module.hot.accept('./reducers/rootReducer', () => {
+        store.replaceReducer(rootReducer)
+      })
+    }
+  }
+
+  return { store, persistor }
+}
+
+
+export default configureStore;

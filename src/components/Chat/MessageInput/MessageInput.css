@@ -1,0 +1,31 @@
+.message-input {
+    background: #fff;
+    padding: 10px;
+    order: 3;
+    border: solid 1px #e8e8e8;
+    position: relative;
+}
+
+.message-input input {
+    width: 100%;
+    resize: none;
+    height: 37px;
+    font-size: 1.2rem;
+    color: #424242;
+    padding: 10px 40px 10px 10px;
+    border-radius: 10px;
+    border: solid 1px #e8e8e8;
+}
+
+.message-input button {
+    position: absolute;
+    right: 25px;
+    bottom: 12px;
+    font-size: 30px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
