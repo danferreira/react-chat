@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import Sign from '../components/Sign/Sign';
 import { signIn } from '../actions/userActions';
-import { isUserAuthenticated } from '../selectors/userSelectors';
+import { getIsUserAuthenticated } from '../selectors/userSelectors';
 
 class SignInContainer extends Component {
 
@@ -46,7 +46,7 @@ class SignInContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        isAuthenticated: isUserAuthenticated(state)
+        isAuthenticated: getIsUserAuthenticated(state)
     }
 }
 

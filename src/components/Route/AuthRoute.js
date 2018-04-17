@@ -1,22 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Redirect } from "react-router-dom";
 
-import Loader from '../Loader/Loader';
+import Loading from '../Loading/Loading';
 
-const PrivateRoute = ({ component: Component, isAuthenticating, isAuthenticated, ...rest }) => {
+const propTypes = {
+    isAuthenticating: PropTypes.bool.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
+    component: PropTypes.func.isRequired
+}
 
+const AuthRoute = ({ component: Component, isAuthenticating, isAuthenticated, ...rest }) => {
     return (
         <Route
             {...rest}
             render={props =>
                 !isAuthenticating === undefined || isAuthenticating ?
-                    <Loader />
+                    <Loading />
                     : isAuthenticated ? (
                         <Component {...props} />
                     ) : (
                             <Redirect
                                 to={{
-                                    pathname: "/",
+                                    pathname: "/signin",
                                     state: { from: props.location }
                                 }}
                             />
@@ -26,4 +32,6 @@ const PrivateRoute = ({ component: Component, isAuthenticating, isAuthenticated,
     );
 }
 
-export default PrivateRoute;
+AuthRoute.propTypes = propTypes;
+
+export default AuthRoute;
