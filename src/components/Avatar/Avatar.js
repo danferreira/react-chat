@@ -6,35 +6,24 @@ import './Avatar.css';
 const propTypes = {
     image: PropTypes.string,
     onClick: PropTypes.func,
-    size: PropTypes.string
+    size: PropTypes.number,
+    children: PropTypes.func
 }
 
 const defaultProps = {
-    image: '../../images/nophoto.jpg',
-    className: 'avatar'
+    size: 32,
+    image: '/images/nophoto.jpg'
 }
 
-const Avatar = ({ image, className, size, children, onClick }) => {
+const Avatar = ({ image, size, children, onClick }) => {
 
-    const handleClick = () => {
-        if(onClick) {
-            onClick();
-        } else {
-            console.log("Open the photo");
-        }
-    }
-
-    var customSize = {};
-
-    if(size) {
-        customSize = {
-            width: `${size}px`,
-            height: `${size}px`
-        }
+    var customSize = {
+        width: `${size}px`,
+        height: `${size}px`
     }
 
     return (
-        <div className={className} onClick={handleClick} style={customSize}>
+        <div className='avatar' onClick={onClick} style={customSize}>
             <img src={image} alt="User Avatar" />
             {children}
         </div>
