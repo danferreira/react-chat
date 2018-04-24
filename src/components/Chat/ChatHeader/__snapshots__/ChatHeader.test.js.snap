@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChatHeader /> should render default image 1`] = `
+<header>
+  <div
+    className="chat-header"
+  >
+    <Avatar
+      image="/images/nophoto.jpg"
+      size={32}
+    />
+    <span
+      className="name"
+    >
+      Dumb
+    </span>
+  </div>
+</header>
+`;
+
+exports[`<ChatHeader /> should render given image 1`] = `
+<header>
+  <div
+    className="chat-header"
+  >
+    <Avatar
+      image="img/foo.jpg"
+      size={32}
+    />
+    <span
+      className="name"
+    >
+      Dumb
+    </span>
+  </div>
+</header>
+`;

@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Chat /> should render properly 1`] = `
+<div
+  className="chat"
+>
+  <ChatHeader
+    contact={
+      Object {
+        "image": "img/foo.jpg",
+        "name": "Dumb",
+      }
+    }
+  />
+  <MessageList />
+  <MessageInput
+    onSend={[Function]}
+  />
+</div>
+`;
