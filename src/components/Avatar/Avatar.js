@@ -7,7 +7,7 @@ const propTypes = {
     image: PropTypes.string,
     onClick: PropTypes.func,
     size: PropTypes.number,
-    children: PropTypes.func
+    children: PropTypes.object
 }
 
 const defaultProps = {
