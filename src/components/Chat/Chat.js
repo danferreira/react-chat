@@ -11,10 +11,10 @@ const propTypes = {
         name: PropTypes.string.isRequired,
         image: PropTypes.string
     }).isRequired,
-    messages: PropTypes.arrayOf({
+    messages: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired
-    })
+    }))
 }
 
 const Chat = ({ contact, messages, onSendMessage }) => {
