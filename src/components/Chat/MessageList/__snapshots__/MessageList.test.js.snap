@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MessageList /> should render a message list 1`] = `
+<div
+  className="message-list"
+  id="main"
+>
+  <Message
+    key="0"
+    message={
+      Object {
+        "content": "hello",
+        "type": "out",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`<MessageList /> should render an empty list 1`] = `
+<div
+  className="message-list"
+  id="main"
+/>
+`;

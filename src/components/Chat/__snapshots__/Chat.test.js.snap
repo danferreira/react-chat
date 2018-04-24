@@ -12,7 +12,9 @@ exports[`<Chat /> should render properly 1`] = `
       }
     }
   />
-  <MessageList />
+  <MessageList
+    messages={Array []}
+  />
   <MessageInput
     onSend={[Function]}
   />
