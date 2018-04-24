@@ -1,35 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './MessageInput.css'
 
 const propTypes = {
-    onSendMessage: PropTypes.func
+    onSend: PropTypes.func
 }
 
-const MessageInput = ({ onSendMessage }) => {
-
-    let input;
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        
-        if (!input.value.trim()) return;
-
-        onSendMessage(input.value);
-        input.value = "";
+class MessageInput extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            message: ""
+        };
     }
 
-    return (
-        <div className="message-input">
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Type a message" ref={node => input = node} autoFocus autoComplete="off"></input>
-                <button type="submit">
-                    <i className="fab fa-telegram-plane"></i>
-                </button>
-            </form>
-        </div>
-    );
+    handleSubmit = (event) => {
+        event.preventDefault();
+
+        var value = this.state.message;
+        
+        if (!value.trim()) return;
+
+        this.props.onSend(value);
+        this.setState({ message: "" });
+    }
+
+    render() {
+        return (
+            <div className="message-input">
+                <form onSubmit={this.handleSubmit}>
+                    <input type="text" placeholder="Type a message" value={this.state.message} autoFocus autoComplete="off"></input>
+                    <button type="submit">
+                        <i className="fab fa-telegram-plane"></i>
+                    </button>
+                </form>
+            </div>
+        );
+    }
 }
 
 MessageInput.propTypes = propTypes;

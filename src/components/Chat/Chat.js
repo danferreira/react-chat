@@ -27,7 +27,7 @@ const Chat = ({ contact, messages, onSendMessage }) => {
         <div className="chat">
             <ChatHeader contact={contact} />
             <MessageList messages={messages} />
-            <MessageInput onSendMessage={handleMessageSent} />
+            <MessageInput onSend={handleMessageSent} />
         </div>
     );
 }
