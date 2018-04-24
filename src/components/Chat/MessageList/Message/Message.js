@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 import './Message.css';
 
 const propTypes = {
-    message: PropTypes.shape({}).isRequired
+    message: PropTypes.shape({
+        content: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired
+    }).isRequired
 }
 
 const Message = ({ message }) =>

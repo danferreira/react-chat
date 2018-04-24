@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Message from './Message/Message';
 import './MessageList.css';
+
+const propTypes = {
+    messages: PropTypes.arrayOf({
+        content: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired
+    })
+}
 
 class MessageList extends Component {
 
@@ -42,5 +50,6 @@ class MessageList extends Component {
     }
 }
 
+MessageList.propTypes = propTypes;
 
 export default MessageList;

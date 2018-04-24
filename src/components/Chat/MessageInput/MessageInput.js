@@ -1,6 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './MessageInput.css'
+
+const propTypes = {
+    onSendMessage: PropTypes.func
+}
 
 const MessageInput = ({ onSendMessage }) => {
 
@@ -26,5 +31,7 @@ const MessageInput = ({ onSendMessage }) => {
         </div>
     );
 }
+
+MessageInput.propTypes = propTypes;
 
 export default MessageInput;
