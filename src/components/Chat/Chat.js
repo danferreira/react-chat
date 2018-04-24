@@ -10,7 +10,7 @@ const propTypes = {
     contact: PropTypes.shape({
         name: PropTypes.string.isRequired,
         image: PropTypes.string
-    }),
+    }).isRequired,
     messages: PropTypes.arrayOf({
         content: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired
