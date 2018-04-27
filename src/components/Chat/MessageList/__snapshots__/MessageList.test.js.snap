@@ -3,23 +3,36 @@
 exports[`<MessageList /> should render a message list 1`] = `
 <div
   className="message-list"
-  id="main"
 >
-  <Message
-    key="0"
-    message={
-      Object {
-        "content": "hello",
-        "type": "out",
+  <SmartScroll>
+    <Message
+      key="1"
+      message={
+        Object {
+          "content": "hello",
+          "id": "1",
+          "type": "out",
+        }
       }
-    }
-  />
+    />
+    <Message
+      key="2"
+      message={
+        Object {
+          "content": "hi. How are you?",
+          "id": "2",
+          "type": "in",
+        }
+      }
+    />
+  </SmartScroll>
 </div>
 `;
 
 exports[`<MessageList /> should render an empty list 1`] = `
 <div
   className="message-list"
-  id="main"
-/>
+>
+  <SmartScroll />
+</div>
 `;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import MessageList from './MessageList';
 
@@ -10,11 +10,16 @@ describe('<MessageList />', () => {
         expect(wrapper).toMatchSnapshot();
     })
 
-
     it('should render a message list', () => {
         var messages = [{
+            id: "1",
             content: "hello",
             type: "out"
+        },
+        {
+            id: "2",
+            content: "hi. How are you?",
+            type: "in"
         }];
 
         var wrapper = shallow(<MessageList messages={messages}/>);
