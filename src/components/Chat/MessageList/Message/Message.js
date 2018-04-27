@@ -6,6 +6,7 @@ import './Message.css';
 
 const propTypes = {
     message: PropTypes.shape({
+        id: PropTypes.string.isRequired,
         content: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired
     }).isRequired
