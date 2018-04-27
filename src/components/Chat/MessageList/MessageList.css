@@ -1,6 +1,6 @@
 .message-list {
     background: #353838;
-    overflow: auto;
     order: 2;
-    height: 100%;
+    height: 100vh;
+    position: relative;
 }
