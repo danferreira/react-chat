@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import './SmartScroll.css';
+
+const propTypes = {
+    children: PropTypes.node.isRequired
+}
 
 class SmartScroll extends PureComponent {
 
@@ -39,7 +44,6 @@ class SmartScroll extends PureComponent {
     }
 
     render() {
-        
         return (
             <div>
                 <div
@@ -60,5 +64,7 @@ class SmartScroll extends PureComponent {
         );
     }
 }
+
+SmartScroll.propTypes = propTypes;
 
 export default SmartScroll;
