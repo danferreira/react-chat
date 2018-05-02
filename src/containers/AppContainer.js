@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { isUserAuthenticated } from '../actions/userActions'
 import { getIsUserAuthenticated, getIsUserAuthenticating } from '../selectors/userSelectors'
-import AuthRoute from '../components/Route/AuthRoute';
-import UnauthRoute from '../components/Route/UnauthRoute';
+import AuthRoute from '../components/AuthRoute/AuthRoute';
+import UnauthRoute from '../components/UnauthRoute/UnauthRoute';
 import history from '../history';
 import SignInPage from '../pages/SignInPage/SignInPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
@@ -23,11 +23,29 @@ class AppContainer extends Component {
         return (
             <Router history={history}>
                 <Switch>
-                    <UnauthRoute exact path='/signin' component={SignInPage} isAuthenticating={isAuthenticating} isAuthenticated={isAuthenticated} />
-                    <UnauthRoute exact path='/signup' component={SignUpPage} isAuthenticating={isAuthenticating} isAuthenticated={isAuthenticated} />
-                    <AuthRoute path='/signout' component={SignOutPage} isAuthenticating={isAuthenticating} isAuthenticated={isAuthenticated} />
-                    <AuthRoute path='/home' component={HomePage} isAuthenticating={isAuthenticating} isAuthenticated={isAuthenticated} />
-                    <Route path='/:uid' component={ProfilePage} />
+                    <UnauthRoute 
+                        exact path='/signin' 
+                        component={SignInPage} 
+                        isAuthenticating={isAuthenticating} 
+                        isAuthenticated={isAuthenticated} />
+                    <UnauthRoute 
+                        exact path='/signup' 
+                        component={SignUpPage} 
+                        isAuthenticating={isAuthenticating} 
+                        isAuthenticated={isAuthenticated} />
+                    <AuthRoute 
+                        path='/signout' 
+                        component={SignOutPage} 
+                        isAuthenticating={isAuthenticating} 
+                        isAuthenticated={isAuthenticated} />
+                    <AuthRoute 
+                        path='/home' 
+                        component={HomePage} 
+                        isAuthenticating={isAuthenticating} 
+                        isAuthenticated={isAuthenticated} />
+                    <Route 
+                        path='/:uid' 
+                        component={ProfilePage} />
                 </Switch>
             </Router>
         );
