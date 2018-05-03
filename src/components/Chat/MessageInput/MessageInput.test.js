@@ -6,21 +6,35 @@ import MessageInput from './MessageInput';
 describe('<MessageInput />', () => {
 
     it('should render properly', () => {
-        var wrapper = shallow(<MessageInput />);
+        const wrapper = shallow(<MessageInput />);
         expect(wrapper).toMatchSnapshot();
     })
 
-    it('should call function', () => {
-        var onSend = jest.fn();
-        var value = 'example of some message';
+    it('should call onChange function', () => {
 
-        var wrapper = mount(<MessageInput onSend={onSend} />);
+        const wrapper = mount(<MessageInput />);
+        const spyOnChange = jest.spyOn(wrapper.instance(), 'onChange');
+        wrapper.instance().forceUpdate();
 
-        expect(wrapper).toMatchSnapshot();
+        wrapper.find('input').simulate('change');
 
-        wrapper.setState({ message: value });
+        expect(spyOnChange).toHaveBeenCalled();
+
+        spyOnChange.mockReset();
+        spyOnChange.mockRestore();
+    })
+
+    it('should call onSend function', () => {
+        const onSend = jest.fn();
+        const value = 'example of some message';
+
+        const wrapper = mount(<MessageInput onSend={onSend} />);
+
+        wrapper.find('input').simulate('change', { target: { value } });
         wrapper.find('button').simulate('submit');
 
         expect(onSend).toBeCalledWith(value);
+
+        onSend.mockReset();
     })
 });
