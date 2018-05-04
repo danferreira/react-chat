@@ -64,12 +64,6 @@ const signOutSuccess = () => ({
     type: types.USER_SIGN_OUT_SUCCESS
 });
 
-
-const registerSuccess = user => ({
-    type: types.USER_REGISTER_SUCCESS,
-    user
-});
-
 const registerError = error => ({
     type: types.USER_REGISTER_ERROR,
     error
