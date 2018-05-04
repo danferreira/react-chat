@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Loader from '../../Loader/Loader';
 import SmartScroll from '../../SmartScroll/SmartScroll';
 import Message from './Message/Message';
 import './MessageList.css';
@@ -25,11 +26,13 @@ class MessageList extends Component {
         return (
             <div className="message-list">
                 <SmartScroll>
-                    {messages.map((m) =>
-                        <Message
-                            message={m}
-                            key={m.id} />
-                    )}
+                    <Loader isLoading={messages.length === 0}>
+                        {messages.map((m) =>
+                            <Message
+                                message={m}
+                                key={m.id} />
+                        )}
+                    </Loader>
                 </SmartScroll>
             </div>
         )
