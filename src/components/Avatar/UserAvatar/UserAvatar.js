@@ -11,7 +11,7 @@ const UserAvatar = ({ image }) => {
 
     return (
         <Avatar
-            size={80}
+            size={60}
             image={image}
             onClick={handleClick}>
             <div className="mask">
