@@ -1,12 +1,14 @@
 .avatar {
-    border-radius: 50%;
     border: solid 1px #c6c6c6;
     cursor: pointer;
-    position: relative;
+    overflow: hidden;
 }
 
 .avatar img {
     width: 100%;
-    border-radius: 50%;
-    position: absolute;
+}
+
+.avatar svg {
+    width: 100%!important;
+    height: 100%;
 }

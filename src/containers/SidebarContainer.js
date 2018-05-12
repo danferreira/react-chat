@@ -3,13 +3,11 @@ import { connect } from 'react-redux';
 import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';
 import { Link } from "react-router-dom";
 
-import UserAvatar from '../components/Avatar/UserAvatar/UserAvatar';
+import Avatar from '../components/Avatar/Avatar';
 import Sidebar from '../components/Sidebar/Sidebar';
 import SidebarHeader from '../components/Sidebar/SidebarHeader/SidebarHeader';
 import ContactListContainer from './ContactListContainer';
 import SidebarPanel from '../components/Sidebar/SidebarPanel/SidebarPanel';
-
-
 
 class SidebarContainer extends Component {
     constructor(props) {
@@ -28,12 +26,14 @@ class SidebarContainer extends Component {
         return (
             <Sidebar>
                 <SidebarHeader>
-                    <UserAvatar />
+                    <Avatar
+                        size='medium'
+                        rounded
+                    />
 
                     <Dropdown>
                         <DropdownTrigger>
                             <span className="username">{user.name}</span>
-                            {/* <div><i class="fas fa-ellipsis-v"></i></div> */}
                         </DropdownTrigger>
 
                         <DropdownContent>

@@ -26,7 +26,7 @@ const Contact = ({ contact, isCurrent, onClick }) => {
             className={classNames("contact", {"current": isCurrent })}
             onClick={handleClick}>
 
-            <Avatar image={contact.image} />
+            <Avatar rounded source={contact.image} />
 
             <div className="info">
                 <p className="contact-name">{contact.name}</p>

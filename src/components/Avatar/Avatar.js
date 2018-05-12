@@ -4,27 +4,47 @@ import PropTypes from 'prop-types';
 import './Avatar.css';
 
 const propTypes = {
-    image: PropTypes.string,
+    source: PropTypes.string,
     onClick: PropTypes.func,
-    size: PropTypes.number,
+    rounded: PropTypes.bool,
+    size: PropTypes.oneOfType([
+        PropTypes.oneOf(['small', 'medium', 'large', 'xlarge']),
+        PropTypes.number,
+    ]),
     children: PropTypes.object
 }
 
 const defaultProps = {
-    size: 32,
-    image: '/images/nophoto.jpg'
+    size: 'small'
 }
 
-const Avatar = ({ image, size, children, onClick }) => {
+const DEFAULT_SIZES = {
+    small: 34,
+    medium: 60,
+    large: 80,
+    xlarge: 100,
+};
 
-    var customSize = {
-        width: `${size}px`,
-        height: `${size}px`
+const Avatar = ({ source, size, rounded, onClick, children }) => {
+
+    var dimension =
+        typeof size === 'number'
+            ? size
+            : DEFAULT_SIZES[size] || DEFAULT_SIZES.small;
+
+    var customStyle = {
+        width: dimension,
+        height: dimension,
+        borderRadius: rounded ? dimension / 2 : 0
     }
 
     return (
-        <div className='avatar' onClick={onClick} style={customSize}>
-            <img src={image} alt="User Avatar" />
+        <div className='avatar' onClick={onClick} style={customStyle}>
+            {source
+                ? <img src={source} alt="User Avatar" />
+                : <i className="fas fa-user"></i>
+            }
+            
             {children}
         </div>
     );
