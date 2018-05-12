@@ -6,8 +6,8 @@ exports[`<ChatHeader /> should render default image 1`] = `
     className="chat-header"
   >
     <Avatar
-      image="/images/nophoto.jpg"
-      size={32}
+      rounded={true}
+      size="small"
     />
     <span
       className="name"
@@ -24,8 +24,9 @@ exports[`<ChatHeader /> should render given image 1`] = `
     className="chat-header"
   >
     <Avatar
-      image="img/foo.jpg"
-      size={32}
+      rounded={true}
+      size="small"
+      source="img/foo.jpg"
     />
     <span
       className="name"

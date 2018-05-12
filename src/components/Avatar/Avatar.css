@@ -2,6 +2,7 @@
     border: solid 1px #c6c6c6;
     cursor: pointer;
     overflow: hidden;
+    background: white;
 }
 
 .avatar img {

@@ -8,13 +8,16 @@ const propTypes = {
     contact: PropTypes.shape({
         name: PropTypes.string.isRequired,
         image: PropTypes.string
-    }).isRequired 
+    }).isRequired
 }
 
-const ChatHeader = ({contact}) => (
+const ChatHeader = ({ contact }) => (
     <header>
         <div className="chat-header">
-            <Avatar image={contact.image} />
+            <Avatar
+                rounded
+                source={contact.image}
+            />
             <span className="name">{contact.name}</span>
         </div>
     </header>

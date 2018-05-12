@@ -5,25 +5,17 @@ import Avatar from './Avatar';
 
 describe('<Avatar />', () => {
 
-    it('render image', () => {
+    it('should render an icon', () => {
         const wrapper = shallow(
             <Avatar />
         );
-        expect(wrapper.find('img').length).toEqual(1);
+        expect(wrapper.find('i').length).toEqual(1);
     });
 
-    it('render a default image', () => {
-        const wrapper = shallow(
-            <Avatar />
-        );
-        
-        expect(wrapper.find('img').prop('src')).toBe(Avatar.defaultProps.image);
-    });
-
-    it('render image properly', () => {
+    it('should render an image', () => {
         const image = '/images/foo.jpg';
         const wrapper = shallow(
-            <Avatar image={image} />
+            <Avatar source={image} />
         );
         expect(wrapper.find('img').prop('src')).toBe(image);
     });
@@ -31,7 +23,7 @@ describe('<Avatar />', () => {
     it('click on avatar', () => {
         const onClick = jest.fn();
         const wrapper = shallow(
-            <Avatar onClick={onClick} image='/images/foo.jpg' />
+            <Avatar onClick={onClick} source='/images/foo.jpg' />
         );
         wrapper.find('div').simulate('click');
 
