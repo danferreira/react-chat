@@ -25,15 +25,15 @@ class MessageList extends Component {
 
         return (
             <div className="message-list">
-                <SmartScroll>
-                    <Loader isLoading={messages.length === 0}>
+                <Loader isLoading={messages.length === 0}>
+                    <SmartScroll>
                         {messages.map((m) =>
                             <Message
                                 message={m}
                                 key={m.id} />
                         )}
-                    </Loader>
-                </SmartScroll>
+                    </SmartScroll>
+                </Loader>
             </div>
         )
     }

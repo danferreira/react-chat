@@ -2,16 +2,16 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Loader from './Loader';
-import Loading from '../Loading/Loading';
+import Spinner from '../Spinner/Spinner';
 
 describe('<Loader />', () => {
-    it('should render a <Loading /> component', () => {
+    it('should render a <Spinner /> component', () => {
         const wrapper = shallow(
             <Loader isLoading={true}>
                 <div></div>
             </Loader>
         );
-        expect(wrapper.find(Loading)).toHaveLength(1);
+        expect(wrapper.find(Spinner)).toHaveLength(1);
     })
 
     it('should render a children', () => {

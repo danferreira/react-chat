@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Loading from './Loading';
+import Spinner from './Spinner';
 
-describe('<Loading />', () => {
+describe('<Spinner />', () => {
     it('should render properly', () => {
-        const wrapper = shallow(<Loading />);
+        const wrapper = shallow(<Spinner />);
 
         expect(wrapper).toMatchSnapshot();
     })

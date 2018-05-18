@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import Loading from '../components/Loading/Loading';
+import Spinner from '../components/Spinner/Spinner';
 import { signOut } from '../actions/userActions';
 
 
@@ -14,7 +14,7 @@ class SignOutContainer extends PureComponent {
     render() {
         return (
             this.props.isAuthenticated
-                ? <Loading />
+                ? <Spinner />
                 : <Redirect to="/signin" />
         );
     }

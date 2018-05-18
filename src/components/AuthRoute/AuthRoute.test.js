@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { Redirect, Route } from 'react-router-dom';
 
 import AuthRoute from './AuthRoute';
-import Loading from '../../components/Loading/Loading';
+import Spinner from '../../components/Spinner/Spinner';
 
 describe('<AuthRoute />', () => {
 
@@ -19,10 +19,10 @@ describe('<AuthRoute />', () => {
                     isAuthenticated={isAuthenticated} />
             ).find(Route).props().render({ location: '/secure' });
 
-    it('should render a <Loading />', () => {
+    it('should render a <Spinner />', () => {
         const component = shallowRenderComponent(true, false);
 
-        expect(component.type).toBe(Loading);
+        expect(component.type).toBe(Spinner);
     })
 
     it('should render the Component', () => {

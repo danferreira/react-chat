@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Loading from '../Loading/Loading';
+import Spinner from '../Spinner/Spinner';
 
 const propTypes = {
     isLoading: PropTypes.bool.isRequired,
@@ -11,7 +11,7 @@ const propTypes = {
 const Loader = ({ isLoading, children }) => {
 
     return isLoading
-        ? <Loading />
+        ? <Spinner />
         : children;
 }
 

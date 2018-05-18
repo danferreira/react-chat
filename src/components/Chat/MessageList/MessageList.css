@@ -2,5 +2,8 @@
     background: #353838;
     order: 2;
     height: 100vh;
-    position: relative;
+    position: relative;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

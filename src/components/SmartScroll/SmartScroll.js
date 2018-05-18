@@ -45,9 +45,9 @@ class SmartScroll extends PureComponent {
 
     render() {
         return (
-            <div>
+            <div className='smart-scroll'>
                 <div
-                    className='smart-scroll'
+                    className='smart-scroll-content'
                     ref={this.node}
                     onScroll={this.handleScroll}>
                     {this.props.children}

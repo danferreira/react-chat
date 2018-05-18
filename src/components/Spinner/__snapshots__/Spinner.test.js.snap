@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Loading /> should render properly 1`] = `
+exports[`<Spinner /> should render properly 1`] = `
 <div
   className="center"
 >

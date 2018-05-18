@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 import PropTypes from 'prop-types';
 
-import Loading from '../Loading/Loading';
+import Spinner from '../Spinner/Spinner';
 
 const propTypes = {
     isAuthenticating: PropTypes.bool.isRequired,
@@ -17,7 +17,7 @@ const UnauthRoute = ({ component: Component, isAuthenticating, isAuthenticated, 
             {...rest}
             render={props =>
                 !isAuthenticating === undefined || isAuthenticating ?
-                    <Loading />
+                    <Spinner />
                     : !isAuthenticated ? (
                         <Component {...props} />
                     ) : (
