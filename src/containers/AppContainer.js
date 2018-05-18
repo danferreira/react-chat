@@ -7,6 +7,7 @@ import { getIsUserAuthenticated, getIsUserAuthenticating } from '../selectors/us
 import AuthRoute from '../components/AuthRoute/AuthRoute';
 import UnauthRoute from '../components/UnauthRoute/UnauthRoute';
 import history from '../history';
+import IndexPage from '../pages/IndexPage/IndexPage';
 import SignInPage from '../pages/SignInPage/SignInPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import SignOutPage from '../pages/SignOutPage/SignOutPage';
@@ -23,13 +24,16 @@ class AppContainer extends Component {
         return (
             <Router history={history}>
                 <Switch>
+                    <Route 
+                        exact path='/' 
+                        component={IndexPage} />
                     <UnauthRoute 
-                        exact path='/signin' 
+                        path='/signin' 
                         component={SignInPage} 
                         isAuthenticating={isAuthenticating} 
                         isAuthenticated={isAuthenticated} />
                     <UnauthRoute 
-                        exact path='/signup' 
+                        path='/signup' 
                         component={SignUpPage} 
                         isAuthenticating={isAuthenticating} 
                         isAuthenticated={isAuthenticated} />
