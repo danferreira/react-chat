@@ -1,0 +1,32 @@
+version: '3' 
+services: 
+  server:     
+    build: .
+    ports: 
+      - 4000:4000 
+    volumes:
+      - .:/app
+    depends_on: 
+      - mongo
+    networks: 
+      - backend
+      - database
+  mongo: 
+    image: mongo:3.4.2
+    volumes:
+      - mongo_data:/data/db
+    networks: 
+      - database
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    networks: 
+      - database
+volumes:
+  mongo_data:
+networks:
+  backend:
+  database:
