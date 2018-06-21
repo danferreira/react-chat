@@ -1,48 +1,42 @@
 import firebase from '../firebase';
 import * as types from './actionTypes';
+import { SIGN_IN_ENDPOINT, SIGN_UP_ENDPOINT } from '../utils/config';
 
 const signInSuccess = user => ({
-    type: types.USER_SIGN_IN_SUCCESS,
-    user
+    type: types.SIGN_IN_SUCCESS,
+    payload: user
 });
 
 const signInError = error => ({
-    type: types.USER_SIGN_IN_ERROR,
-    error
+    type: types.SIGN_IN_ERROR,
+    payload: error
 });
 
-const startSignIn = () => ({
-    type: types.USER_IS_SIGN_IN
+const signInRequest = () => ({
+    type: types.SIGN_IN_REQUEST
 });
 
 export const signIn = () => (dispatch, getState) => {
-    dispatch(startSignIn());
+
+    dispatch(signInRequest());
 
     const { email, password } = getState().form.sign.values;
 
-    return firebase.auth().signInWithEmailAndPassword(email, password);
-}
-
-export const isUserAuthenticated = () => {
-    return (dispatch, getState) => {
-        dispatch(startSignIn());
-
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                firebase.database().ref("/users/" + user.uid).once("value").then(snapshot => {
-                    dispatch(signInSuccess({
-                        id: user.uid,
-                        name: snapshot.val().name,
-                        avatar: snapshot.val().avatar,
-                        bio: snapshot.val().bio
-                    }));
-                });
-            }
-            else {
-                dispatch(signOutSuccess());
-            }
-        }, error => console.log("error: ", error));
-    }
+    fetch(SIGN_IN_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            password,
+        }),
+        headers: { "Content-Type": "application/json" }
+    })
+        .then(results => results.json())
+        .then(result => {
+            dispatch(result.status === "success" ? signInSuccess(result.data) : signInError(result.data))
+        }).catch(error => {
+            console.log(error);
+            dispatch(signInError({ message: "Internal error" }))
+        });
 }
 
 export const signOut = () => {
@@ -56,33 +50,50 @@ export const signOut = () => {
     }
 }
 
-const isSignOut = () => ({
-    type: types.USER_IS_SIGN_OUT
+const signOutRequest = () => ({
+    type: types.SIGN_OUT_REQUEST
 })
 
 const signOutSuccess = () => ({
-    type: types.USER_SIGN_OUT_SUCCESS
+    type: types.SIGN_OUT_SUCCESS
 });
 
-const registerError = error => ({
-    type: types.USER_REGISTER_ERROR,
-    error
+const signUpSuccess = user => ({
+    type: types.SIGN_UP_SUCCESS,
+    payload: user
 });
 
-export const register = () => {
+const signUpError = error => ({
+    type: types.SIGN_UP_ERROR,
+    payload: error
+});
+
+const signUpRequest = () => ({
+    type: types.SIGN_UP_REQUEST
+})
+
+export const signUp = () => {
 
     return (dispatch, getState) => {
 
-        var form = getState().form;
-        var email = form.sign.values.email;
-        var password = form.sign.values.password;
+        dispatch(signUpRequest())
 
-        return firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(user =>
-                firebase.database().ref("/users/" + user.uid).set({
-                    name: user.email,
-                    email: user.email
-                })
-            );
+        const { email, password } = getState().form.sign.values;
+
+        fetch(SIGN_UP_ENDPOINT, {
+            method: 'POST',
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(results => results.json())
+            .then(result => {
+                dispatch(result.status === "success" ? signUpSuccess(result.data) : signUpError(result.data))
+            }).catch(error => {
+                console.log(error);
+                dispatch(signUpError({ message: "Internal error" }))
+            });
     }
 }

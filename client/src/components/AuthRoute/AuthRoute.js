@@ -24,7 +24,7 @@ const AuthRoute = ({ component: Component, isAuthenticating, isAuthenticated, ..
                 ) : (
                         <Redirect
                             to={{
-                                pathname: "/signin",
+                                pathname: "/login",
                                 state: { from: props.location }
                             }}
                         />

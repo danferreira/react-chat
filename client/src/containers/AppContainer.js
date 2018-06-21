@@ -1,26 +1,40 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import decode from 'jwt-decode';
 
-import { isUserAuthenticated } from '../actions/userActions'
 import { getIsUserAuthenticated, getIsUserAuthenticating } from '../selectors/userSelectors'
 import AuthRoute from '../components/AuthRoute/AuthRoute';
 import UnauthRoute from '../components/UnauthRoute/UnauthRoute';
 import history from '../history';
 import IndexPage from '../pages/IndexPage/IndexPage';
-import SignInPage from '../pages/SignInPage/SignInPage';
-import SignUpPage from '../pages/SignUpPage/SignUpPage';
+import LoginPage from '../pages/LoginPage/LoginPage';
+import RegisterPage from '../pages/RegisterPage/RegisterPage';
 import SignOutPage from '../pages/SignOutPage/SignOutPage';
 import HomePage from '../pages/HomePage/HomePage';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 
 class AppContainer extends Component {
+    state = {
+        isAuthenticating: true,
+        isAuthenticated: false
+    }
     componentDidMount() {
-        this.props.isUserAuthenticated();
+        const token = localStorage.getItem('token');
+        let isAuthenticated = true;
+
+        try {
+          decode(token);        
+        } catch (err) {
+            isAuthenticated = false;
+        }
+      
+        this.setState({isAuthenticating: false, isAuthenticated});
     }
 
     render() {
-        const { isAuthenticating, isAuthenticated } = this.props;
+        const { isAuthenticating, isAuthenticated } = this.state;
+
         return (
             <Router history={history}>
                 <Switch>
@@ -28,13 +42,13 @@ class AppContainer extends Component {
                         exact path='/' 
                         component={IndexPage} />
                     <UnauthRoute 
-                        path='/signin' 
-                        component={SignInPage} 
+                        path='/login' 
+                        component={LoginPage} 
                         isAuthenticating={isAuthenticating} 
                         isAuthenticated={isAuthenticated} />
                     <UnauthRoute 
-                        path='/signup' 
-                        component={SignUpPage} 
+                        path='/register' 
+                        component={RegisterPage} 
                         isAuthenticating={isAuthenticating} 
                         isAuthenticated={isAuthenticated} />
                     <AuthRoute 
@@ -56,15 +70,4 @@ class AppContainer extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        isAuthenticating: getIsUserAuthenticating(state),
-        isAuthenticated: getIsUserAuthenticated(state)
-    }
-}
-
-const mapDispatchToProps = {
-    isUserAuthenticated
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+export default AppContainer;

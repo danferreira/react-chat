@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { Formik, Form, Field } from 'formik';
 import { withRouter } from 'react-router-dom';
 
-const RegisterSchema = Yup.object().shape({
+const LoginSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email address')
         .required('Required'),
@@ -15,7 +15,7 @@ const RegisterSchema = Yup.object().shape({
         .required('Required'),
 });
 
-class RegisterContainer extends Component {
+class LoginContainer extends Component {
 
     componentWillMount() {
         if (this.props.isAuthenticated) {
@@ -65,7 +65,7 @@ class RegisterContainer extends Component {
             <div className="sign-form">
                 <Form>
                     {errors.general && <div>{errors.general}</div>}
-                    <label className='title'>Register</label>
+                    <label className='title'>Login</label>
                     <Field type="text" name="email" placeholder="E-mail" />
                     {errors.email && touched.email && <div>{errors.email}</div>}
                     <Field type="password" name="password" placeholder="Password" />
@@ -84,7 +84,7 @@ class RegisterContainer extends Component {
                     email: '',
                     password: '',
                 }}
-                validationSchema={RegisterSchema}
+                validationSchema={LoginSchema}
                 onSubmit={this.onSubmit}
                 render={this.renderForm} />
         );
@@ -93,23 +93,9 @@ class RegisterContainer extends Component {
 
 export default withRouter(graphql(gql`
     mutation($email: String!, $password: String!) {
-        register(email: $email, password: $password) {
-        success
-        token
+        login(email: $email, password: $password) {
+            success
+            token
         }
   }
-`)(RegisterContainer));
-
-
-// const mapStateToProps = (state) => {
-//     return {
-//         isAuthenticated: getIsUserAuthenticated(state),
-//         serverError: getErrorMessage(state)
-//     }
-// }
-
-// const mapDispatch = {
-//     signUp
-// }
-
-// export default withRouter(connect(mapStateToProps, mapDispatch)(SignUpContainer));
+`)(LoginContainer));

@@ -1,38 +1,62 @@
-import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-var UserSchema = new mongoose.Schema({
-  email: {
-        type: String,
-        unique: true,
-        required: true,
-        lowercase: true
-    },
-  password: {
-        type: String,
-        required: true,
-        select: false
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    }
-});
+export default (sequelize, DataTypes) => {
+    const User = sequelize.define('User', {
+        email: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+            validate: {
+                isEmail: {
+                    args: true,
+                    msg: 'Invalid e-mail address',
+                },
+            },
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: {
+                    args: [6, 255],
+                    msg: 'The password must be greater than 6 characters',
+                },
+            },
+        },
+    }, {
+        tableName: 'users',
+        hooks: {
+            beforeCreate: async (user) => {
+                // eslint-disable-next-line no-param-reassign
+                user.password = await bcrypt.hash(user.password, 12);
+            },
+        },
+    });
 
-UserSchema.pre('save', async function (next) {
-    var user = this;
-    user.password = await bcrypt.hash(user.password, 10);
+    User.prototype.comparePassword = function compare(password) {
+        return bcrypt.compare(password, this.dataValues.password);
+    };
 
-    next();
-});
+    User.associate = (models) => {
+        User.belongsToMany(User, {
+            as: 'Contacts',
+            through: 'userContacts',
+            foreignKey: {
+                name: 'userId',
+                field: 'user_id',
+            },
+        });
 
-// UserSchema.comparePassword = function (passw, cb) {
-//     compare(passw, this.password, function (err, isMatch) {
-//         if (err) {
-//             return cb(err);
-//         }
-//         cb(null, isMatch);
-//     });
-// };
+        User.hasMany(models.Message, {
+            foreignKey: 'senderId',
+            field: 'sender_id',
+        });
 
-export default mongoose.model('User', UserSchema);
+        User.hasMany(models.Message, {
+            foreignKey: 'receiverId',
+            field: 'receiver_id',
+        });
+    };
+
+    return User;
+};

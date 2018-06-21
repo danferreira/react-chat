@@ -1,32 +1,34 @@
 version: '3' 
 services: 
-  server:     
+  node:     
     build: .
     ports: 
       - 4000:4000 
     volumes:
       - .:/app
     depends_on: 
-      - mongo
+      - postgresql
     networks: 
-      - backend
+      - server
       - database
-  mongo: 
-    image: mongo:3.4.2
+  postgresql: 
+    image: postgres
+    restart: always
     volumes:
-      - mongo_data:/data/db
+      - postgre_data:/var/lib/postgresql/data
     networks: 
       - database
-  mongo-express:
-    image: mongo-express
+  adminer:
+    image: adminer
+    restart: always
     ports:
-      - 8081:8081
-    depends_on:
-      - mongo
+      - 8080:8080
+    depends_on: 
+      - postgresql
     networks: 
       - database
 volumes:
-  mongo_data:
+  postgre_data:
 networks:
-  backend:
+  server:
   database:

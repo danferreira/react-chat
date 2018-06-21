@@ -22,8 +22,8 @@ class Sign extends Component {
     }
 
     render() {
-        var { title, linkTitle, linkUrl, handleSubmit, onSubmit, error, submitting } = this.props;
-
+        var { title, linkTitle, linkUrl, handleSubmit, onSubmit, error, serverError, submitting } = this.props;
+        
         return (
             <div className="sign-form">
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -31,6 +31,10 @@ class Sign extends Component {
                     {
                         error &&
                         <span className="error">{error}</span>
+                    }
+                    {
+                        serverError &&
+                        <span className="error">{serverError}</span>
                     }
                     <Field
                         component={RenderField}

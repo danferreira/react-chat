@@ -1,43 +1,55 @@
 import express from 'express';
-import { ApolloServer } from 'apollo-server';
-import { registerServer } from 'apollo-server-express';
-import expressJwt from 'express-jwt';
+import { ApolloServer } from 'apollo-server-express';
+import cors from 'cors';
 
-import mongoose from 'mongoose';
+import models from './models';
+import typeDefs from './schemas/user';
+import resolvers from './resolvers/user';
 
-import authRouter from './routes/auth'
-import typeDefs from './graphql/schema';
-// import resolvers from './graphql/resolvers';
+const app = express();
 
-mongoose.connect('mongodb://mongo/chat');
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log('Mongodb connected...'));
-
-var app = express();
+console.log(process.env.NODE_ENV);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
-app.use(expressJwt({
-  secret: 'secret'
-}).unless({ path: ['/api/register', '/api/login/'] }));
+// app.use(expressJwt({
+//   secret: 'token-secret',
+//   credentialsRequired: false
+// }));
 
-app.use('/api', authRouter);
+// app.use('/api', authRouter);
 
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).send('invalid token');
-  } else {
-    next(err);
-  }
+// app.use((err, req, res, next) => {
+//     if (err.name === 'UnauthorizedError') {
+//         return res.status(401).send('invalid token');
+//     }
+//     console.log(err);
+//     return res.status(500).send('Internal server error');
+// });
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: () => ({
+        models,
+    }),
+    // formatError: (error) => {
+    //     console.log(error);
+    //     return {
+    //         code: error.extensions.code,
+    //         message: error.message,
+    //     };
+    // },
+    // debug: false,
 });
 
-const server = new ApolloServer({ typeDefs, mocks: true });
+server.applyMiddleware({ app });
 
-registerServer({ app, server })
-
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+models.sequelize.sync({
+    // force: true,
+}).then(() => {
+    app.listen({ port: 4000 }, () =>
+        console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
 });

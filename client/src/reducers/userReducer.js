@@ -3,10 +3,15 @@ import initialState from './initialState';
 
 export default function userReducer(state = initialState.user, action) {
     switch (action.type) {
-        case types.USER_IS_SIGN_IN:
+        case types.SIGN_IN_REQUEST:
+        case types.SIGN_UP_REQUEST:
             return { ...state, isAuthenticating: true };
-        case types.USER_SIGN_IN_SUCCESS:
-            return { ...state, isAuthenticating: false, id: action.user.id, name: action.user.name, bio: action.user.bio, avatar: "" };
+        case types.SIGN_IN_SUCCESS:
+        case types.SIGN_UP_SUCCESS:
+            return { ...state, isAuthenticating: false, id: action.payload.user._id, name: action.payload.user.email, bio: action.payload.user.bio, avatar: action.payload.user.avatar };
+        case types.SIGN_IN_ERROR:
+        case types.SIGN_UP_ERROR:
+            return { ...state, isAuthenticating: false, error: action.payload.message };
         default:
             return state;
     }

@@ -1,38 +1,63 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+// import { connect } from 'react-redux';
+import { graphql, Query } from "react-apollo";
+import gql from "graphql-tag";
 
-import { loadContacts, setCurrentContact } from '../actions/contactActions';
+// import { loadContacts, setCurrentContact } from '../actions/contactActions';
+// import { getOrderedContactList } from '../selectors/contactSelectors';
+
 import ContactList from '../components/ContactList/ContactList';
-import { getOrderedContactList } from '../selectors/contactSelectors';
 
-class ContactListContainer extends Component {
-
-    componentDidMount() {
-        this.props.loadContacts();
-    }
-
-    render() {
-        const { contacts, currentContactId, setCurrentContact } = this.props;
-
-        return (
-            <ContactList
-                contacts={contacts}
-                currentContactId={currentContactId}
-                onContactClick={setCurrentContact} />
-        );
+const GET_CONTACTS_QUERY = gql`
+query {
+    getUserContacts {
+        id
+        name
+        avatar
     }
 }
+`;
 
-const mapStateToProps = (state) => {
-    return {
-        contacts: getOrderedContactList(state),
-        currentContactId: state.current
-    }
+const ContactListContainer = ({ currentContactId, setCurrentContact }) => {
+
+    return (
+        <Query query={GET_CONTACTS_QUERY}>
+            {({ loading, error, getUserContacts }) => {
+                if (loading) return <p>Loading...</p>
+                if (error) return <p>Error</p>
+                console.log(getUserContacts);
+                return (
+                    <ContactList
+                        contacts={getUserContacts}
+                        currentContactId={currentContactId}
+                        onContactClick={setCurrentContact} />
+                )
+            }}
+        </Query>)
 }
 
-const mapDispatch = {
-    loadContacts,
-    setCurrentContact
-}
+export default ContactListContainer;
 
-export default connect(mapStateToProps, mapDispatch)(ContactListContainer);
+
+
+
+
+
+
+
+
+
+
+// const mapStateToProps = (state) => {
+//     return {
+//         contacts: getOrderedContactList(state),
+//         currentContactId: state.current
+//     }
+// }
+
+// const mapDispatch = {
+//     loadContacts,
+//     setCurrentContact
+// }
+
+// export default connect(mapStateToProps, mapDispatch)(ContactListContainer);
