@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import { ValidationError } from 'sequelize';
 import { BadUserInputError } from 'apollo-server';
 
+import Config from '../config';
+
 const safeHandler = handler =>
     (...args) => handler(...args).catch((e) => {
         if (e instanceof ValidationError) {
@@ -18,14 +20,15 @@ const safeHandler = handler =>
 const getToken = payload => (
     jwt.sign({
         payload,
-    }, 'token-secret')
+    }, Config.token)
 );
 
 export default {
     Query: {
-        getUserContacts: (root, { id }, { models }) => {
-
-        },
+        getUserContacts: (root, { id }, { models, user }) => ([{
+            id: 1,
+            name: `${user.payload.id}`,
+        }]),
     },
 
     Mutation: {
@@ -38,7 +41,9 @@ export default {
 
             if (!user || !user.comparePassword(password)) {
                 throw new BadUserInputError('input', {
-                    email: 'Invalid credentials',
+                    inputErrors: [{
+                        email: 'Invalid Credentials',
+                    }],
                 });
             }
 

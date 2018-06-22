@@ -1,39 +1,31 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import expressJwt from 'express-jwt';
+
 import cors from 'cors';
 
+import Config from './config';
 import models from './models';
 import typeDefs from './schemas/user';
 import resolvers from './resolvers/user';
 
 const app = express();
 
-console.log(process.env.NODE_ENV);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-// app.use(expressJwt({
-//   secret: 'token-secret',
-//   credentialsRequired: false
-// }));
-
-// app.use('/api', authRouter);
-
-// app.use((err, req, res, next) => {
-//     if (err.name === 'UnauthorizedError') {
-//         return res.status(401).send('invalid token');
-//     }
-//     console.log(err);
-//     return res.status(500).send('Internal server error');
-// });
+app.use(expressJwt({
+    secret: Config.token,
+    credentialsRequired: false,
+}));
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: () => ({
+    context: ({ req }) => ({
         models,
+        user: req.user,
     }),
     // formatError: (error) => {
     //     console.log(error);

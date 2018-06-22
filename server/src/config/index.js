@@ -3,6 +3,7 @@ const config = {
     username: 'postgres',
     password: '',
     dialect: 'postgres',
+    token: 'token-secret',
 };
 
 export default config;
