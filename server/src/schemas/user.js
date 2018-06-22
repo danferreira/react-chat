@@ -3,7 +3,8 @@ import { gql } from 'apollo-server';
 export default gql`
 type Contact {
   id: Int!
-  email: String!
+  name: String!
+  lastMessage: String
 }
 
 type User {
@@ -13,7 +14,7 @@ type User {
 }
 
 type Query {
-  getUserContacts(id: Int!): [Contact!]
+  getUserContacts: [Contact!]
 }
 
 type AuthResponse {
