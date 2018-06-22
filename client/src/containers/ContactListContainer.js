@@ -13,7 +13,7 @@ query {
     getUserContacts {
         id
         name
-        avatar
+        lastMessage
     }
 }
 `;
@@ -22,7 +22,7 @@ const ContactListContainer = ({ currentContactId, setCurrentContact }) => {
 
     return (
         <Query query={GET_CONTACTS_QUERY}>
-            {({ loading, error, getUserContacts }) => {
+            {({ loading, error, data: {getUserContacts} }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error</p>
                 console.log(getUserContacts);
