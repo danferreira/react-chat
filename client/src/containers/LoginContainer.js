@@ -46,7 +46,7 @@ class LoginContainer extends Component {
             variables: { email, password },
         }).then(
             response => {
-                const { success, token } = response.data.register;
+                const { success, token } = response.data.login;
 
                 if (success) {
                     localStorage.setItem('token', token);
