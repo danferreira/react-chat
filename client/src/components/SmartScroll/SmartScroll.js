@@ -12,10 +12,10 @@ class SmartScroll extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.node = React.createRef();
+        this.scroller = React.createRef();
         this.state = {
             autoScroll: true,
-            isScrollButtonVisible: false
+            isScrollButtonVisible: false,
         }
     }
 
@@ -23,24 +23,35 @@ class SmartScroll extends PureComponent {
         this.scrollToBottom();
     }
 
-    componentDidUpdate() {
+    c
+    componentDidUpdate(prevProps) {
         if (this.state.autoScroll)
             this.scrollToBottom();
+
+        if(this.props.children !== prevProps.children) {            
+            this.scroller.current.scrollTop = this.scroller.current.scrollHeight - this.state.lastScrollPosition;
+        }
     }
 
     handleScroll = () => {
-        const { scrollTop, scrollHeight, offsetHeight } = this.node.current;
-        const distanceFromBottom = scrollHeight - (scrollTop + offsetHeight);
+        const { scrollTop, scrollHeight, offsetHeight } = this.scroller.current;
 
+        if(scrollTop <= 100  && this.props.onScrollTop) {
+            this.props.onScrollTop();
+        }
+
+        const distanceFromBottom = scrollHeight - (scrollTop + offsetHeight);
         const autoScroll = distanceFromBottom <= 100;
+
         this.setState({
             autoScroll,
-            isScrollButtonVisible: !autoScroll
+            isScrollButtonVisible: !autoScroll,
+            lastScrollPosition: scrollHeight,
         });
     }
 
     scrollToBottom = () => {
-        this.node.current.scrollTop = this.node.current.scrollHeight;
+        this.scroller.current.scrollTop = this.scroller.current.scrollHeight;
     }
 
     render() {
@@ -48,7 +59,7 @@ class SmartScroll extends PureComponent {
             <div className='smart-scroll'>
                 <div
                     className='smart-scroll-content'
-                    ref={this.node}
+                    ref={this.scroller}
                     onScroll={this.handleScroll}>
                     {this.props.children}
                 </div>

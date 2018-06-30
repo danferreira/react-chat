@@ -4,16 +4,13 @@ import PropTypes from 'prop-types';
 import './MessageInput.css'
 
 const propTypes = {
-    onSend: PropTypes.func
+    onSend: PropTypes.func.isRequired
 }
 
 class MessageInput extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            message: ""
-        };
-    }
+    state = {
+        message: ""
+    };
 
     handleSubmit = (event) => {
         event.preventDefault();

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const getCurrentContactId = (state) => state.contact.current;
+export const getCurrentContactId = (state) => state.contact.current;
 const getContactList = (state) => state.contact.list;
 
 export const getCurrentContact = createSelector(

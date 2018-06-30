@@ -14,20 +14,24 @@ const propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired
-    }))
+    })),
+    onSendMessage: PropTypes.func.isRequired,
+    onLoadMoreItems: PropTypes.func.isRequired,
+    hasMoreItems: PropTypes.bool.isRequired,
+    isLoadingMoreItems: PropTypes.bool.isRequired,
 }
 
-const Chat = ({ contact, messages, onSendMessage }) => {
-
-    const handleMessageSent = (message) => {
-        onSendMessage(message, contact);
-    }
+const Chat = ({ contact, messages, onSendMessage, onLoadMoreItems, hasMoreItems, isLoadingMoreItems }) => {
 
     return (
         <div className="chat">
             <ChatHeader contact={contact} />
-            <MessageList messages={messages} />
-            <MessageInput onSend={handleMessageSent} />
+            <MessageList 
+                messages={messages} 
+                onLoadMoreItems={onLoadMoreItems}
+                hasMoreItems={hasMoreItems}
+                isLoadingMoreItems={isLoadingMoreItems}/>
+            <MessageInput onSend={onSendMessage} />
         </div>
     );
 }

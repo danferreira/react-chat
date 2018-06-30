@@ -18,6 +18,8 @@ const defaultProps = {
 
 const Contact = ({ contact, isCurrent, onClick }) => {
 
+    const truncateMessage = (message) => message.length > 30? message.substring(0, 27)+"..." : message;
+
     const handleClick = () =>
         onClick(contact.id)
     
@@ -30,7 +32,7 @@ const Contact = ({ contact, isCurrent, onClick }) => {
 
             <div className="info">
                 <p className="contact-name">{contact.name}</p>
-                <p className="last-message">{contact.last_message}</p>
+                <p className="last-message">{truncateMessage(contact.lastMessage)}</p>
             </div>
         </div>
     );
