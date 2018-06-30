@@ -40,7 +40,7 @@ export default (sequelize, DataTypes) => {
     User.associate = (models) => {
         User.belongsToMany(User, {
             as: 'Contacts',
-            through: 'userContacts',
+            through: 'user_contacts',
             foreignKey: {
                 name: 'userId',
                 field: 'user_id',
@@ -48,13 +48,17 @@ export default (sequelize, DataTypes) => {
         });
 
         User.hasMany(models.Message, {
-            foreignKey: 'senderId',
-            field: 'sender_id',
+            foreignKey: {
+                name: 'senderId',
+                field: 'sender_id',
+            },
         });
 
         User.hasMany(models.Message, {
-            foreignKey: 'receiverId',
-            field: 'receiver_id',
+            foreignKey: {
+                name: 'receiverId',
+                field: 'receiver_id',
+            },
         });
     };
 

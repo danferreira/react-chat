@@ -12,6 +12,7 @@ const sequelize = new Sequelize(Config.database, Config.username, Config.passwor
     dialect: Config.dialect,
     define: {
         underscored: true,
+        underscoredAll: true,
     },
 });
 

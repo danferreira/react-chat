@@ -10,7 +10,6 @@ type Contact {
 type User {
   id: Int!
   email: String!
-  contacts: [Contact]
 }
 
 type Query {
@@ -21,7 +20,6 @@ type AuthResponse {
   success: Boolean!
   token: String
 }
-
 
 type Mutation {
   login(email: String!, password: String!): AuthResponse!
