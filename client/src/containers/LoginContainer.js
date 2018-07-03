@@ -41,7 +41,6 @@ class LoginContainer extends Component {
 
         const { email, password } = values;
         const { mutate, login, history } = this.props;
-    
         
         mutate({
             variables: { email, password },

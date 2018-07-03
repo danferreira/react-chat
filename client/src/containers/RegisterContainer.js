@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { connect} from 'react-redux';
 
 import {getIsUserAuthenticated} from '../selectors/userSelectors';
+import { register } from '../actions/userActions'
 
 const RegisterSchema = Yup.object().shape({
     email: Yup.string()
@@ -19,12 +20,6 @@ const RegisterSchema = Yup.object().shape({
 });
 
 class RegisterContainer extends Component {
-
-    componentWillMount() {
-        if (this.props.isAuthenticated) {
-            this.props.history.push("/home");
-        }
-    }
 
     transpileGraphQLErrorToFormik = (errors) => {
         let formikErrors = {};
@@ -43,17 +38,22 @@ class RegisterContainer extends Component {
     }
 
     onSubmit = (values, actions) => {
-
         const { email, password } = values;
-        this.props.mutate({
+        const { mutate, register, history } = this.props;
+
+        mutate({
             variables: { email, password },
         }).then(
             response => {
-                const { success, token } = response.data.register;
+                const { success, user, token } = response.data.login;
 
                 if (success) {
                     localStorage.setItem('token', token);
-                    this.props.history.push("/home");
+                    register({
+                        id: user.id,
+                        name: user.name
+                    });
+                    history.push('/home');
                 }
             },
             error => {
@@ -100,9 +100,13 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = {
+    register
+}
+
 export default compose(
     withRouter,
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     graphql(gql`
     mutation($email: String!, $password: String!) {
         register(email: $email, password: $password) {
@@ -111,17 +115,3 @@ export default compose(
         }
   }`)
 )(RegisterContainer);
-
-
-// const mapStateToProps = (state) => {
-//     return {
-//         isAuthenticated: getIsUserAuthenticated(state),
-//         serverError: getErrorMessage(state)
-//     }
-// }
-
-// const mapDispatch = {
-//     signUp
-// }
-
-// export default withRouter(connect(mapStateToProps, mapDispatch)(SignUpContainer));

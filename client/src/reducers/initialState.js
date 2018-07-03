@@ -4,5 +4,4 @@ export default {
         current: null,
         list: []
     },
-    chat: []
 }

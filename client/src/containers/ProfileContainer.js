@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
 import firebase from '../firebase'
 import Profile from '../components/Profile/Profile';
-import { sendProfileMessage } from '../actions/chatActions';
+// import { sendProfileMessage } from '../actions/chatActions';
 
 class ProfileContainer extends Component {
 
@@ -16,36 +16,39 @@ class ProfileContainer extends Component {
         }
     }
 
-    componentDidMount() {
-        const userId = this.props.match.params.uid;
+    // componentDidMount() {
+    //     const userId = this.props.match.params.uid;
 
-        firebase.database().ref("/users/" + userId).once("value").then(snapshot => {
-            if(!snapshot.val()) 
-                this.props.history.push("/home");;
+    //     firebase.database().ref("/users/" + userId).once("value").then(snapshot => {
+    //         if(!snapshot.val()) 
+    //             this.props.history.push("/home");;
 
-            this.setState(prevState => ({
-                user: {
-                    id: snapshot.key,
-                    name: snapshot.val().name,
-                    avatar: snapshot.val().avatar,
-                    bio: snapshot.val().bio
-                },
-                isLoading: false
-            }));
-        });
-    }
+    //         this.setState(prevState => ({
+    //             user: {
+    //                 id: snapshot.key,
+    //                 name: snapshot.val().name,
+    //                 avatar: snapshot.val().avatar,
+    //                 bio: snapshot.val().bio
+    //             },
+    //             isLoading: false
+    //         }));
+    //     });
+    // }
 
     render() {
         return (
             <Loader isLoading={this.state.isLoading}>
-                <Profile user={this.state.user} onSendMessage={this.props.sendProfileMessage} />                
+                {/* <Profile user={this.state.user} />                 */}
+                <div>Profile</div>
             </Loader>
         );
     }
 }
 
-var mapDispatchToProps = {
-    sendProfileMessage
-}
+// var mapDispatchToProps = {
+    // sendProfileMessage
+// }
 
-export default withRouter(connect(null, mapDispatchToProps)(ProfileContainer));
+// export default withRouter(connect(null, mapDispatchToProps)(ProfileContainer));
+
+export default ProfileContainer;

@@ -8,7 +8,6 @@ import rootReducer from './reducers/rootReducer';
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['contact', 'chat', 'form']
 }
 
 
@@ -16,7 +15,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const configureStore = () => {
   const store = createStore(
-    rootReducer,
+    persistedReducer,
     compose(
       applyMiddleware(thunk),
       window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import chat from './chatReducer';
+import * as  types from '../actions/actionTypes';
 import contacts from './contactReducer';
 import user from './userReducer';
 
@@ -8,11 +8,11 @@ import user from './userReducer';
 const appReducer = combineReducers({
   contacts,
   user,
-  chat,
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === 'USER_SIGN_OUT_SUCCESS') {
+  if (action.type === types.SIGN_OUT_SUCCESS) {
+    console.log('signout')
     state = undefined;
   }
 

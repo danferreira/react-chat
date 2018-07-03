@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import Spinner from '../components/Spinner/Spinner';
 import { signOut } from '../actions/userActions';
+import { getIsUserAuthenticated } from '../selectors/userSelectors'
 
 
 class SignOutContainer extends PureComponent {
@@ -15,14 +16,14 @@ class SignOutContainer extends PureComponent {
         return (
             this.props.isAuthenticated
                 ? <Spinner />
-                : <Redirect to="/signin" />
+                : <Redirect to="/login" />
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        isAuthenticated: state.user.isAuthenticated
+        isAuthenticated: getIsUserAuthenticated(state)
     }
 }
 

@@ -8,7 +8,7 @@ export const login = user => ({
 export const signOut = () => {
     return (dispatch, getState) => {
         localStorage.removeItem('token');
-        dispatch(signOutSuccess);
+        dispatch(signOutSuccess());
     }
 }
 
