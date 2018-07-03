@@ -15,10 +15,7 @@ const defaultProps = {
     contacts: []
 }
 
-const ContactList = ({ contacts, selectedContactId, onContactClick }) => {
-
-    const isCurrent = (contactId) => contactId === selectedContactId;
-    
+const ContactList = ({ contacts, currentContactId, onContactClick }) => {
     return (
         <div className="contact-list">
             {contacts.length > 0 ?
@@ -27,7 +24,7 @@ const ContactList = ({ contacts, selectedContactId, onContactClick }) => {
                         <li key={c.id}>
                             <Contact
                                 contact={c}
-                                isCurrent={isCurrent(c.id)}
+                                isCurrent={c.id === currentContactId}
                                 onClick={onContactClick} />
                         </li>
                     )}

@@ -12,27 +12,23 @@ class ChatContainer extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
-        this.unsubscribe = this.subscribe(this.props.contactId);
+        this.unsubscribe = this.subscribe(this.props.contact.id);
     }
-
-
+    
     componentDidUpdate(prevProps) {
-        if (this.props.contactId !== prevProps.contactId) {
+        if (this.props.contact.id !== prevProps.contact.id) {
 
             if (this.unsubscribe) {
-                console.log('didupdate')
                 this.unsubscribe();
             }
 
-            this.unsubscribe = this.subscribe(this.props.contactId);
+            this.unsubscribe = this.subscribe(this.props.contact.id);
             this.setState({ hasMoreItems: true });
         }
     }
 
     componentWillUnmount() {
         if (this.unsubscribe) {
-            console.log('unmount')
             this.unsubscribe();
         }
     }
@@ -40,20 +36,20 @@ class ChatContainer extends Component {
     handleMessageSent = (message) => {
         this.props.mutate({
             variables: {
-                receiverId: this.props.contactId,
+                receiverId: this.props.contact.id,
                 content: message,
             },
         });
     }
 
     handleLoadMoreItems = () => {
-        const { contactId, data: { fetchMessages, fetchMore } } = this.props;
+        const { contact, data: { fetchMessages, fetchMore } } = this.props;
         this.setState({ isLoadingMoreItems: true });
 
 
         fetchMore({
             variables: {
-                contactId: contactId,
+                contactId: contact.id,
                 cursor: fetchMessages[fetchMessages.length - 1].id,
             },
             updateQuery: (prev, { fetchMoreResult }) => {
@@ -89,7 +85,7 @@ class ChatContainer extends Component {
                 contactId,
             },
             updateQuery: (prev, { subscriptionData }) => {
-                console.log('update', subscriptionData);
+                console.log(subscriptionData)
                 if (!subscriptionData || !subscriptionData.data.newMessage) {
                     return prev;
                 }
@@ -97,7 +93,7 @@ class ChatContainer extends Component {
                 return {
                     ...prev,
                     fetchMessages: [
-                        ...subscriptionData.data.newMessage,
+                        subscriptionData.data.newMessage,
                         ...prev.fetchMessages,
                     ],
                 };
@@ -105,7 +101,7 @@ class ChatContainer extends Component {
         })
 
     render() {
-        const { contactId, data: { loading, error, fetchMessages } } = this.props;
+        const { contact, data: { loading, error, fetchMessages } } = this.props;
         const { hasMoreItems, isLoadingMoreItems } = this.state;
 
         if (loading)
@@ -116,14 +112,14 @@ class ChatContainer extends Component {
 
         const messages = fetchMessages && fetchMessages.map(m => ({
             id: m.id,
-            type: m.senderId === contactId ? 'in' : 'out',
+            type: m.senderId === contact.id ? 'in' : 'out',
             content: m.content,
             date: m.created_at,
         })).reverse();
 
         return (
             <Chat
-                contact={{ name: "contact" }}
+                contact={contact}
                 messages={messages}
                 onSendMessage={this.handleMessageSent}
                 onLoadMoreItems={this.handleLoadMoreItems}
@@ -172,7 +168,7 @@ export default compose(
         options: props => ({
             fetchPolicy: "network-only",
             variables: {
-                contactId: props.contactId
+                contactId: props.contact.id
             },
         })
     }),

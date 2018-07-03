@@ -3,6 +3,8 @@ import initialState from './initialState';
 
 export default function contactReducer(state = initialState.contacts, action) {
     switch (action.type) {
+        case types.LOAD_CONTACTS:
+            return { ...state, list: action.contacts };
         case types.CONTACT_ADD:
             var filteredList = state.list.filter(c => c.id !== action.contact.id);
             return Object.assign({}, state, { list: filteredList.concat(action.contact) });
@@ -16,7 +18,7 @@ export default function contactReducer(state = initialState.contacts, action) {
 
             return Object.assign({}, state, { list });
         case types.SET_CURRENT_CONTACT:
-            return Object.assign({}, state, { current: action.contactId })
+            return { ...state, current: action.contactId }
         default:
             return state;
     }

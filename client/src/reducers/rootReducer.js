@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'
 
 import chat from './chatReducer';
-import contact from './contactReducer';
+import contacts from './contactReducer';
 import user from './userReducer';
 
 
 const appReducer = combineReducers({
-  contact,
+  contacts,
   user,
   chat,
   form: formReducer

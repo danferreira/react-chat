@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
-import { setCurrentContact } from '../actions/contactActions';
+import { loadContacts, setCurrentContact } from '../actions/contactActions';
 import ContactList from '../components/ContactList/ContactList';
+import { getCurrentContactId } from '../selectors/contactSelectors';
 
 const GET_CONTACTS_QUERY = gql`
     query {
@@ -16,14 +17,16 @@ const GET_CONTACTS_QUERY = gql`
     }
 `;
 
-const ContactListContainer = ({ currentContactId, setCurrentContact }) => {
+const ContactListContainer = ({ currentContactId, loadContacts, setCurrentContact }) => {
 
     return (
         <Query query={GET_CONTACTS_QUERY}>
             {({ loading, error, data: { getUserContacts } }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error</p>
-                
+
+                loadContacts(getUserContacts);
+
                 return (
                     <ContactList
                         contacts={getUserContacts}
@@ -35,15 +38,15 @@ const ContactListContainer = ({ currentContactId, setCurrentContact }) => {
 }
 
 
-// const mapStateToProps = (state) => {
-//     return {
-//         contacts: getOrderedContactList(state),
-//         currentContactId: state.current
-//     }
-// }
-
-const mapDispatch = {
-    setCurrentContact
+const mapStateToProps = (state) => {
+    return {
+        currentContactId: getCurrentContactId(state)
+    }
 }
 
-export default connect(null, mapDispatch)(ContactListContainer);
+const mapDispatch = {
+    loadContacts,
+    setCurrentContact,
+}
+
+export default connect(mapStateToProps, mapDispatch)(ContactListContainer);

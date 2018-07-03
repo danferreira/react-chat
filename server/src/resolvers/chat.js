@@ -1,35 +1,35 @@
-import { ValidationError } from 'sequelize';
-import { UserInputError, PubSub, withFilter } from 'apollo-server';
+import { withFilter } from 'apollo-server';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 
-const pubSub = new PubSub();
+import isAuthenticatedResolver from '../permissions';
+
+const pubSub = new RedisPubSub({
+    connection: {
+        host: process.env.REDIS_HOST || '127.0.0.1',
+        port: 6379,
+        retry_strategy: options => Math.max(options.attempt * 100, 3000),
+    },
+});
 
 const NEW_MESSAGE = 'NEW_MESSAGE';
 
-const safeHandler = handler =>
-    (...args) => handler(...args).catch((e) => {
-        if (e instanceof ValidationError) {
-            throw new UserInputError('input', {
-                inputErrors: e.errors.map(err => ({ [err.path]: err.message })),
-            });
-        } else if (e instanceof UserInputError) {
-            throw e;
-        }
-        throw new Error('Internal Server Error');
-    });
-
 export default {
     Query: {
-        fetchMessages: async (root, { contactId, cursor }, { models, user }) => {
+        fetchMessages: isAuthenticatedResolver.createResolver(async (root, { contactId, cursor }, { models, user }) => {
             const options = {
                 where: {
-                    senderId: user.payload.id,
-                    receiverId: contactId,
+                    senderId: {
+                        [models.sequelize.Op.or]: [user.payload.id, contactId],
+                    },
+                    receiverId: {
+                        [models.sequelize.Op.or]: [user.payload.id, contactId],
+                    },
                 },
                 order: [['id', 'DESC']],
                 limit: 20,
             };
 
-            await new Promise(resolve => setTimeout(() => resolve(console.log('sleep')), 2000));
+            // await new Promise(resolve => setTimeout(() => resolve(console.log('sleep')), 2000));
 
             if (cursor) {
                 options.where.id = {
@@ -38,31 +38,31 @@ export default {
             }
 
             return models.Message.findAll(options, { raw: true });
-        },
+        }),
     },
     Mutation: {
-        createMessage: async (root, { receiverId, content }, { models, user }) => {
+        createMessage: isAuthenticatedResolver.createResolver(async (root, { receiverId, content }, { models, user }) => {
             const result = await models.Message.create({ senderId: user.payload.id, receiverId, content });
             pubSub.publish(NEW_MESSAGE, {
-                contactId: receiverId,
+                senderId: user.payload.id,
+                receiverId,
                 newMessage: result,
             });
 
             return {
                 success: true,
             };
-        },
+        }),
     },
     Subscription: {
         newMessage: {
             subscribe:
-                withFilter(
+                isAuthenticatedResolver.createResolver(withFilter(
                     () => pubSub.asyncIterator(NEW_MESSAGE),
-                    (payload, args) => {
-                        console.log(payload.contactId, args);
-                        return payload.contactId === args.contactId;
-                    },
-                ),
+                    ({ senderId, receiverId }, { contactId }, { user }) =>
+                        (senderId === user.payload.id || senderId === contactId) &&
+                        (receiverId === user.payload.id || receiverId === contactId),
+                )),
         },
     },
 };

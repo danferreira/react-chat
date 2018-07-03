@@ -34,7 +34,7 @@ const formatDate = date => {
 const Message = ({ message }) =>
     <div className="message">
         <div className={classNames("message-bubble", "message-" + message.type)}>
-            <p>{message.id + message.content}</p>
+            <p>{message.content}</p>
             <span>{formatDate(message.date)}</span>
         </div>
     </div>

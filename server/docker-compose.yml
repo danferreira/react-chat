@@ -6,11 +6,15 @@ services:
       - 4000:4000 
     volumes:
       - .:/app
+    environment:
+      REDIS_HOST: redis
     depends_on: 
+      - redis
       - postgresql
     networks: 
       - server
       - database
+      - redis
   postgresql: 
     image: postgres
     restart: always
@@ -27,8 +31,13 @@ services:
       - postgresql
     networks: 
       - database
+  redis:
+    image: redis
+    networks: 
+      - redis
 volumes:
   postgre_data:
 networks:
   server:
   database:
+  redis:

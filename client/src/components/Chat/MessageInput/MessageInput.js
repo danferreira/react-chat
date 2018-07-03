@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import './MessageInput.css'
@@ -7,7 +7,7 @@ const propTypes = {
     onSend: PropTypes.func.isRequired
 }
 
-class MessageInput extends Component {
+class MessageInput extends PureComponent {
     state = {
         message: ""
     };

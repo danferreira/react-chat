@@ -37,17 +37,21 @@ export default {
                     users u join 
                     (
                         select 
-                            distinct on(receiver_id) 
-                            receiver_id, 
+                            distinct on(contact_id) 
+                            CASE
+                                WHEN sender_id = ${user.payload.id} THEN receiver_id
+                                ELSE sender_id
+                            END AS contact_id, 
                             content as last_message, 
                             created_at as last_message_date
                         from 
                             messages 
                         where 
-                            sender_id=${user.payload.id} 
+                            sender_id=${user.payload.id} OR
+                            receiver_id=${user.payload.id}
                         order by 
-                            receiver_id, created_at desc
-                    ) as m on u.id = m.receiver_id
+                            contact_id, created_at desc
+                    ) as m on u.id = m.contact_id
                     order by created_at desc`,
                 { type: models.sequelize.QueryTypes.SELECT },
             );

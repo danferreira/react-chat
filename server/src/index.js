@@ -1,9 +1,10 @@
 import { createServer } from 'http';
 import express from 'express';
 import path from 'path';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import expressJwt from 'express-jwt';
+import jwt from 'jsonwebtoken';
 import cors from 'cors';
 
 import Config from './config';
@@ -27,12 +28,30 @@ const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers'))
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async ({ req }) => ({
-        models,
-        user: req ? req.user : null,
-    }),
+    context: ({ req, connection }) => {
+        if (connection) {
+            return {
+                user: connection.context.user,
+            };
+        }
+
+        return {
+            models,
+            user: req ? req.user : null,
+        };
+    },
     // debug: false,
-    tracing: true,
+    subscriptions: {
+        onConnect: connectionParams => new Promise((resolve, reject) => {
+            if (connectionParams.Token) {
+                const user = jwt.verify(connectionParams.Token, Config.token);
+
+                if (user) return resolve({ user });
+            }
+
+            return reject(new AuthenticationError('Invalid Token'));
+        }),
+    },
 });
 
 server.applyMiddleware({ app });

@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import SidebarContainer from '../../containers/SidebarContainer';
 import NoChat from '../../components/NoChat/NoChat';
 import ChatContainer from '../../containers/ChatContainer';
-import { getCurrentContactId } from '../../selectors/contactSelectors';
+import { getCurrentContact } from '../../selectors/contactSelectors';
 import './HomePage.css';
 
-const HomePage = ({ contactId }) => {
+const HomePage = ({ contact }) => {
 
   var panel = <NoChat />
   
-  if (contactId) {
-    panel = <ChatContainer contactId={contactId} />
+  if (contact) {
+    panel = <ChatContainer contact={contact} />
   }
 
   return (
@@ -28,7 +28,7 @@ const HomePage = ({ contactId }) => {
 
 const mapState = (state) => {
   return {
-    contactId: getCurrentContactId(state),
+    contact: getCurrentContact(state),
   }
 }
 

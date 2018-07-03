@@ -32,9 +32,10 @@ class MessageList extends Component {
         const { messages, isLoadingMoreItems } = this.props;
 
         return (
-            <div className="message-list">
-                <SmartScroll onScrollTop={this.handleScrollTop}>
-                    {isLoadingMoreItems && <Spinner />}
+            <div className="message-list">                
+                <SmartScroll 
+                    onScrollTop={this.handleScrollTop}
+                    isLoadingMoreItems={isLoadingMoreItems}>
                     {messages.map((m) =>
                         <Message
                             message={m}
