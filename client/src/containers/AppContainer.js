@@ -15,25 +15,10 @@ import HomePage from '../pages/HomePage/HomePage';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 
 class AppContainer extends Component {
-    state = {
-        isAuthenticating: true,
-        isAuthenticated: false
-    }
-    componentDidMount() {
-        const token = localStorage.getItem('token');
-        let isAuthenticated = true;
-
-        try {
-          decode(token);        
-        } catch (err) {
-            isAuthenticated = false;
-        }
-      
-        this.setState({isAuthenticating: false, isAuthenticated});
-    }
 
     render() {
-        const { isAuthenticating, isAuthenticated } = this.state;
+        const isAuthenticating = false;
+        const { isAuthenticated } = this.props;
 
         return (
             <Router history={history}>
@@ -70,4 +55,11 @@ class AppContainer extends Component {
     }
 }
 
-export default AppContainer;
+
+const mapStateToProps = (state) => {
+    return {
+        isAuthenticated: getIsUserAuthenticated(state)
+    }
+}
+
+export default connect(mapStateToProps)(AppContainer);

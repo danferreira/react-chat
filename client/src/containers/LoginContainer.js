@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import * as Yup from 'yup';
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import { Formik, Form, Field } from 'formik';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { getIsUserAuthenticated } from '../selectors/userSelectors';
+import { login } from '../actions/userActions'
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -16,12 +20,6 @@ const LoginSchema = Yup.object().shape({
 });
 
 class LoginContainer extends Component {
-
-    componentWillMount() {
-        if (this.props.isAuthenticated) {
-            this.props.history.push("/home");
-        }
-    }
 
     transpileGraphQLErrorToFormik = (errors) => {
         let formikErrors = {};
@@ -39,18 +37,25 @@ class LoginContainer extends Component {
         return formikErrors;
     }
 
-    onSubmit = (values, actions) => {
+    handleSubmit = (values, actions) => {
 
         const { email, password } = values;
-        this.props.mutate({
+        const { mutate, login, history } = this.props;
+    
+        
+        mutate({
             variables: { email, password },
         }).then(
             response => {
-                const { success, token } = response.data.login;
+                const { success, user, token } = response.data.login;
 
                 if (success) {
                     localStorage.setItem('token', token);
-                    this.props.history.push("/home");
+                    login({
+                        id: user.id,
+                        name: user.name
+                    });
+                    history.push('/home');
                 }
             },
             error => {
@@ -85,17 +90,34 @@ class LoginContainer extends Component {
                     password: '',
                 }}
                 validationSchema={LoginSchema}
-                onSubmit={this.onSubmit}
+                onSubmit={this.handleSubmit}
                 render={this.renderForm} />
         );
     }
 }
 
-export default withRouter(graphql(gql`
+const mapStateToProps = (state) => {
+    return {
+        isAuthenticated: getIsUserAuthenticated(state)
+    }
+}
+
+const mapDispatchToProps = {
+    login
+}
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps),
+    graphql(gql`
     mutation($email: String!, $password: String!) {
         login(email: $email, password: $password) {
             success
+            user {
+                id
+                name
+            }
             token
         }
-  }
-`)(LoginContainer));
+  }`)
+)(LoginContainer);

@@ -9,7 +9,7 @@ type Contact {
 
 type User {
   id: Int!
-  email: String!
+  name: String!
 }
 
 type Query {
@@ -18,6 +18,7 @@ type Query {
 
 type AuthResponse {
   success: Boolean!
+  user: User!
   token: String
 }
 

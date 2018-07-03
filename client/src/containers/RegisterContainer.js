@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import * as Yup from 'yup';
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import { Formik, Form, Field } from 'formik';
 import { withRouter } from 'react-router-dom';
+import { connect} from 'react-redux';
+
+import {getIsUserAuthenticated} from '../selectors/userSelectors';
 
 const RegisterSchema = Yup.object().shape({
     email: Yup.string()
@@ -91,14 +94,23 @@ class RegisterContainer extends Component {
     }
 }
 
-export default withRouter(graphql(gql`
+const mapStateToProps = (state) => {
+    return {
+        isAuthenticated: getIsUserAuthenticated(state)
+    }
+}
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps),
+    graphql(gql`
     mutation($email: String!, $password: String!) {
         register(email: $email, password: $password) {
         success
         token
         }
-  }
-`)(RegisterContainer));
+  }`)
+)(RegisterContainer);
 
 
 // const mapStateToProps = (state) => {

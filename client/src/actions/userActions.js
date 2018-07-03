@@ -1,43 +1,11 @@
 import firebase from '../firebase';
 import * as types from './actionTypes';
-import { SIGN_IN_ENDPOINT, SIGN_UP_ENDPOINT } from '../utils/config';
+import { SIGN_UP_ENDPOINT } from '../utils/config';
 
-const signInSuccess = user => ({
-    type: types.SIGN_IN_SUCCESS,
-    payload: user
+export const login = user => ({
+    type: types.LOGIN,
+    user
 });
-
-const signInError = error => ({
-    type: types.SIGN_IN_ERROR,
-    payload: error
-});
-
-const signInRequest = () => ({
-    type: types.SIGN_IN_REQUEST
-});
-
-export const signIn = () => (dispatch, getState) => {
-
-    dispatch(signInRequest());
-
-    const { email, password } = getState().form.sign.values;
-
-    fetch(SIGN_IN_ENDPOINT, {
-        method: 'POST',
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-        headers: { "Content-Type": "application/json" }
-    })
-        .then(results => results.json())
-        .then(result => {
-            dispatch(result.status === "success" ? signInSuccess(result.data) : signInError(result.data))
-        }).catch(error => {
-            console.log(error);
-            dispatch(signInError({ message: "Internal error" }))
-        });
-}
 
 export const signOut = () => {
     return (dispatch, getState) => {

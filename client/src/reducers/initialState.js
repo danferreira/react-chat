@@ -1,7 +1,5 @@
 export default {
-    user: {
-        isAuthenticating: false
-    },
+    user: null,
     contacts: {
         current: null,
         list: []

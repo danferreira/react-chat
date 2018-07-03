@@ -83,6 +83,10 @@ export default {
 
             return {
                 success: true,
+                user: {
+                    id: user.id,
+                    name: user.email,
+                },
                 token: getToken({ id: user.id }),
             };
         },
