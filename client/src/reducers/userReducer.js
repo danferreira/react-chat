@@ -4,6 +4,7 @@ import initialState from './initialState';
 export default function userReducer(state = initialState.user, action) {
     switch (action.type) {
         case types.LOGIN:
+        case types.REGISTER:
             return { ...state, ...action.user };
         default:
             return state;

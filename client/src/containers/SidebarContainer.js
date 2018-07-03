@@ -45,8 +45,10 @@ class SidebarContainer extends Component {
                     </Dropdown>
                 </SidebarHeader>
                 <ContactListContainer />
-
-                <SidebarPanel title="Settings" onClose={this.onSettings} isOpen={this.state.settingsIsOpen}>
+                <SidebarPanel
+                    title="Settings"
+                    onClose={this.onSettings} 
+                    isOpen={this.state.settingsIsOpen}>
 
                 </SidebarPanel>
 

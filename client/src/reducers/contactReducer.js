@@ -5,18 +5,6 @@ export default function contactReducer(state = initialState.contacts, action) {
     switch (action.type) {
         case types.LOAD_CONTACTS:
             return { ...state, list: action.contacts };
-        case types.CONTACT_ADD:
-            var filteredList = state.list.filter(c => c.id !== action.contact.id);
-            return Object.assign({}, state, { list: filteredList.concat(action.contact) });
-        case types.CONTACT_UPDATE:
-            var list = state.list.map(c => {
-                if (c.id === action.contact.id) {
-                    c = action.contact
-                }
-                return c;
-            });
-
-            return Object.assign({}, state, { list });
         case types.SET_CURRENT_CONTACT:
             return { ...state, current: action.contactId }
         default:

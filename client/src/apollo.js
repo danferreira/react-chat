@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from "apollo-link-ws";
 import { onError } from 'apollo-link-error';
 import { ApolloLink, Observable, split } from 'apollo-link';
-import {getMainDefinition} from 'apollo-utilities';
+import { getMainDefinition } from 'apollo-utilities';
 
 const GRAPHQL_ENDPOINT = 'http://localhost:4000/graphql';
 const GRAPHQL_WS_ENDPOINT = 'ws://localhost:4000/graphql';
@@ -65,7 +65,7 @@ const wsLink = new WebSocketLink({
         reconnect: true,
         connectionParams: {
             Token: localStorage.getItem('token')
-          }
+        }
     }
 });
 
