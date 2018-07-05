@@ -40,30 +40,8 @@ export const fetchMessages = (chatId) => (dispatch, getState) => {
 
 export const sendMessage = (message, contact) => (dispatch, getState) => {
     var currentUser = getState().user;
-    var msgId = firebase.database().ref(`/chats/${contact.chatId}/messages`).push().key;
-    var updates = {};
 
-    updates[`/users-contacts/${currentUser.id}/${contact.id}`] = ({
-        name: contact.name,
-        last_message: message,
-        last_message_date: firebase.database.ServerValue.TIMESTAMP,
-        chatId: contact.chatId
-    });
-
-    updates[`/users-contacts/${contact.id}/${currentUser.id}`] = ({
-        name: currentUser.name,
-        last_message: message,
-        last_message_date: firebase.database.ServerValue.TIMESTAMP,
-        chatId: contact.chatId
-    });
-
-    updates[`/chats/${contact.chatId}/messages/${msgId}`] = {
-        from: currentUser.id,
-        content: message,
-        date: firebase.database.ServerValue.TIMESTAMP
-    }
-
-    firebase.database().ref().update(updates);
+    sendMessageFirebase(contact.chatId, currentUser, contact, message)
 }
 
 export const sendProfileMessage = (message, profileUser) => (dispatch, getState) => {
@@ -74,26 +52,30 @@ export const sendProfileMessage = (message, profileUser) => (dispatch, getState)
         ? alreadyContact.chatId
         : firebase.database().ref("/chats").push().key;
 
+    sendMessageFirebase(chatId, currentUser, profileUser, message);
+}
+
+function sendMessageFirebase(chatId, from, to, message) {
     var msgId = firebase.database().ref(`/chats/${chatId}/messages`).push().key;
 
     var updates = {};
 
-    updates[`/users-contacts/${currentUser.id}/${profileUser.id}`] = {
-        name: profileUser.name,
+    updates[`/users-contacts/${from.id}/${to.id}`] = {
+        name: to.name,
         last_message: message,
         last_message_date: firebase.database.ServerValue.TIMESTAMP,
         chatId: chatId
     }
 
-    updates[`/users-contacts/${profileUser.id}/${currentUser.id}`] = {
-        name: currentUser.name,
+    updates[`/users-contacts/${to.id}/${from.id}`] = {
+        name: from.name,
         last_message: message,
         last_message_date: firebase.database.ServerValue.TIMESTAMP,
         chatId: chatId
     }
 
     updates[`/chats/${chatId}/messages/${msgId}`] = {
-        from: currentUser.id,
+        from: from.id,
         content: message,
         date: firebase.database.ServerValue.TIMESTAMP
     }

@@ -13,12 +13,15 @@ class ChatContainer extends Component {
 
     render() {
         return (
-            <Chat contact={this.props.contact} messages={this.props.messages} onSendMessage={this.props.sendMessage} />
+            <Chat
+                contact={this.props.contact}
+                messages={this.props.messages}
+                onSendMessage={this.props.sendMessage} />
         );
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         messages: getMessages(state)
     }
