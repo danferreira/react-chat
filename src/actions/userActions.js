@@ -56,20 +56,11 @@ export const signOut = () => {
     }
 }
 
-const isSignOut = () => ({
-    type: types.USER_IS_SIGN_OUT
-})
-
 const signOutSuccess = () => ({
     type: types.USER_SIGN_OUT_SUCCESS
 });
 
-const registerError = error => ({
-    type: types.USER_REGISTER_ERROR,
-    error
-});
-
-export const register = () => {
+export const signUp = () => {
 
     return (dispatch, getState) => {
 

@@ -4,7 +4,7 @@ import { SubmissionError } from 'redux-form'
 import { withRouter } from 'react-router-dom';
 
 import Sign from '../components/Sign/Sign';
-import { register } from '../actions/userActions';
+import { signUp } from '../actions/userActions';
 
 class SignUpContainer extends Component {
 
@@ -48,7 +48,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatch = {
-    register
+    signUp
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatch)(SignUpContainer));
