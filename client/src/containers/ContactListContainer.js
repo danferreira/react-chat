@@ -1,42 +1,45 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Query } from "react-apollo";
+import { compose, graphql, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 
 import { loadContacts, setCurrentContact } from '../actions/contactActions';
 import ContactList from '../components/ContactList/ContactList';
 import { getCurrentContactId } from '../selectors/contactSelectors';
 
-const GET_CONTACTS_QUERY = gql`
-    query {
-        getUserContacts {
-            id
-            name
-            lastMessage
+class ContactListContainer extends PureComponent {
+
+    componentDidMount() {
+        this.subscription = this.subscribe();
+    }
+
+    componentDidUpdate() {
+        this.props.loadContacts(this.props.data.getUserContacts);
+    }
+
+    componentWillUnmount() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
         }
     }
-`;
 
-const ContactListContainer = ({ currentContactId, loadContacts, setCurrentContact }) => {
+    subscribe = () => (
+        this.props.client.subscribe({
+            query: NEW_MESSAGE_SUBSCRIPTION
+        }).subscribe(() => this.props.data.refetch())
+    )
 
-    return (
-        <Query query={GET_CONTACTS_QUERY}>
-            {({ loading, error, data: { getUserContacts } }) => {
-                if (loading) return <p>Loading...</p>
-                if (error) return <p>Error</p>
+    render() {
+        const { currentContactId, setCurrentContact, data: { getUserContacts } } = this.props;
 
-                loadContacts(getUserContacts);
-
-                return (
-                    <ContactList
-                        contacts={getUserContacts}
-                        currentContactId={currentContactId}
-                        onContactClick={setCurrentContact} />
-                )
-            }}
-        </Query>)
+        return (
+            <ContactList
+                contacts={getUserContacts}
+                currentContactId={currentContactId}
+                onContactClick={setCurrentContact} />);
+    }
 }
-
 
 const mapStateToProps = (state) => {
     return {
@@ -49,4 +52,26 @@ const mapDispatch = {
     setCurrentContact,
 }
 
-export default connect(mapStateToProps, mapDispatch)(ContactListContainer);
+const GET_CONTACTS_QUERY = gql`
+    query {
+        getUserContacts {
+            id
+            name
+            lastMessage
+        }
+    }
+`;
+
+const NEW_MESSAGE_SUBSCRIPTION = gql`
+    subscription {
+        newMessage {
+            id
+        }
+    }
+`;
+
+export default compose(
+    withApollo,
+    graphql(GET_CONTACTS_QUERY),
+    connect(mapStateToProps, mapDispatch)
+)(ContactListContainer);

@@ -12,6 +12,7 @@ const pubSub = new RedisPubSub({
 });
 
 const NEW_MESSAGE = 'NEW_MESSAGE';
+const NEW_CONTACT_MESSAGE = 'NEW_CONTACT_MESSAGE';
 
 export default {
     Query: {
@@ -59,9 +60,18 @@ export default {
             subscribe:
                 isAuthenticatedResolver.createResolver(withFilter(
                     () => pubSub.asyncIterator(NEW_MESSAGE),
-                    ({ senderId, receiverId }, { contactId }, { user }) =>
-                        (senderId === user.payload.id || senderId === contactId) &&
-                        (receiverId === user.payload.id || receiverId === contactId),
+                    ({ senderId, receiverId }, { contactId }, { user }) => {
+                        if (!contactId) {
+                            // just check if it's the current logged user listening for new messages to/from him
+                            return (senderId === user.payload.id || receiverId === user.payload.id);
+                        }
+
+                        // message should be
+                        // from subscribed user to contact or
+                        return ((senderId === user.payload.id && receiverId === contactId) ||
+                            // from contact to subscribed user
+                            (senderId === contactId && receiverId === user.payload.id));
+                    },
                 )),
         },
     },

@@ -147,7 +147,6 @@ const CREATE_MESSAGE_MUTATION = gql`
             success
         }
     }
-
 `;
 
 const NEW_MESSAGE_SUBSCRIPTION = gql`
@@ -160,13 +159,11 @@ const NEW_MESSAGE_SUBSCRIPTION = gql`
             created_at
         }
     }
-
 `;
 
 export default compose(
     graphql(FETCH_MESSAGES_QUERY, {
         options: props => ({
-            fetchPolicy: "network-only",
             variables: {
                 contactId: props.contact.id
             },

@@ -52,7 +52,7 @@ export default {
                         order by 
                             contact_id, created_at desc
                     ) as m on u.id = m.contact_id
-                    order by created_at desc`,
+                    order by last_message_date desc`,
                 { type: models.sequelize.QueryTypes.SELECT },
             );
 

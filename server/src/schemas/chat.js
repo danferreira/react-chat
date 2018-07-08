@@ -22,7 +22,7 @@ type Mutation {
 }
 
 type Subscription {
-    newMessage(contactId: Int!): Message
+    newMessage(contactId: Int): Message
 }
 
 `;
