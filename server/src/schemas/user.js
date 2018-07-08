@@ -9,10 +9,12 @@ type Contact {
 
 type User {
   id: Int!
-  name: String!
+  name: String
+  email: String!,
 }
 
 type Query {
+  getAllUsers: [User]
   getUserContacts: [Contact!]
 }
 
@@ -24,7 +26,7 @@ type AuthResponse {
 
 type Mutation {
   login(email: String!, password: String!): AuthResponse!
-  register(email: String!, password: String!): AuthResponse!
+  register(name: String!, email: String!, password: String!): AuthResponse!
 }
 
 `;

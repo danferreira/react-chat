@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { ValidationError } from 'sequelize';
 import { UserInputError } from 'apollo-server';
 
+import isAuthenticatedResolver from '../permissions';
 import Config from '../config';
 
 const safeHandler = handler =>
@@ -25,7 +26,8 @@ const getToken = payload => (
 
 export default {
     Query: {
-        getUserContacts: async (root, args, { models, user }) => {
+        getAllUsers: (root, args, { models }) => models.User.findAll(),
+        getUserContacts: isAuthenticatedResolver.createResolver(async (root, args, { models, user }) => {
             const result = await models.sequelize.query(
                 `
                 select 
@@ -62,7 +64,7 @@ export default {
                 lastMessage: r.last_message,
                 lastMessageDate: r.last_message_date,
             }));
-        },
+        }),
     },
 
     Mutation: {
@@ -85,17 +87,19 @@ export default {
                 success: true,
                 user: {
                     id: user.id,
-                    name: user.email,
+                    name: user.name,
+                    email: user.email,
                 },
                 token: getToken({ id: user.id }),
             };
         },
-        register: safeHandler(async (root, { email, password }, { models }) => {
+        register: safeHandler(async (root, { name, email, password }, { models }) => {
             const result = await models.User.findOrCreate({
                 where: {
                     email,
                 },
                 defaults: {
+                    name,
                     password,
                 },
                 raw: true,
@@ -113,6 +117,11 @@ export default {
 
             return {
                 success: true,
+                user: {
+                    id: user.id,
+                    name: user.email,
+                    email: user.email,
+                },
                 token: getToken({ id: user.id }),
             };
         }),

@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import { Formik, Form, Field } from 'formik';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 
 import { getIsUserAuthenticated } from '../selectors/userSelectors';
 import { login } from '../actions/userActions'
@@ -76,6 +77,7 @@ class LoginContainer extends Component {
                     {errors.password &&
                         touched.password && <div>{errors.password}</div>}
                     <button type="submit" disabled={isSubmitting}>Send</button>
+                    <Link to='/register'>Register</Link>
                 </Form>
             </div>
         )

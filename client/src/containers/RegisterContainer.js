@@ -10,6 +10,9 @@ import {getIsUserAuthenticated} from '../selectors/userSelectors';
 import { register } from '../actions/userActions'
 
 const RegisterSchema = Yup.object().shape({
+    name: Yup.string()
+    .max(255, 'Must be no longer than 255 characters')
+    .required('Required'),
     email: Yup.string()
         .email('Invalid email address')
         .required('Required'),
@@ -38,20 +41,21 @@ class RegisterContainer extends Component {
     }
 
     onSubmit = (values, actions) => {
-        const { email, password } = values;
+        const { name, email, password } = values;
         const { mutate, register, history } = this.props;
 
         mutate({
-            variables: { email, password },
+            variables: { name, email, password },
         }).then(
             response => {
-                const { success, user, token } = response.data.login;
+                const { success, user, token } = response.data.register;
 
                 if (success) {
                     localStorage.setItem('token', token);
                     register({
                         id: user.id,
-                        name: user.name
+                        name: user.name,
+                        email: user.email
                     });
                     history.push('/home');
                 }
@@ -69,6 +73,8 @@ class RegisterContainer extends Component {
                 <Form>
                     {errors.general && <div>{errors.general}</div>}
                     <label className='title'>Register</label>
+                    <Field type="text" name="name" placeholder="Name" />
+                    {errors.name && touched.name && <div>{errors.name}</div>}
                     <Field type="text" name="email" placeholder="E-mail" />
                     {errors.email && touched.email && <div>{errors.email}</div>}
                     <Field type="password" name="password" placeholder="Password" />
@@ -84,6 +90,7 @@ class RegisterContainer extends Component {
         return (
             <Formik
                 initialValues={{
+                    name: '',
                     email: '',
                     password: '',
                 }}
@@ -108,10 +115,15 @@ export default compose(
     withRouter,
     connect(mapStateToProps, mapDispatchToProps),
     graphql(gql`
-    mutation($email: String!, $password: String!) {
-        register(email: $email, password: $password) {
-        success
-        token
+    mutation($name: String!, $email: String!, $password: String!) {
+        register(name: $name, email: $email, password: $password) {
+            success
+            user {
+                id
+                name
+                email
+            }
+            token
         }
   }`)
 )(RegisterContainer);

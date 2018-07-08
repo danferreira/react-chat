@@ -12,7 +12,6 @@ const pubSub = new RedisPubSub({
 });
 
 const NEW_MESSAGE = 'NEW_MESSAGE';
-const NEW_CONTACT_MESSAGE = 'NEW_CONTACT_MESSAGE';
 
 export default {
     Query: {
