@@ -32,7 +32,7 @@ const Profile = ({user, onSendMessage}) => {
     return (
         <div className="profile">
             <div className="info">
-                <Avatar size="150" image="/images/User-2.jpg" />
+                <Avatar size="xlarge" image="/images/User-2.jpg" />
                 <span className="name">{user.name}</span>
                 <div className="bio">
                     <p>{user.bio}</p>

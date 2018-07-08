@@ -7,7 +7,7 @@ import "./ContactList.css";
 
 const propTypes = {
     contacts: PropTypes.array,
-    selectedContactId: PropTypes.number,
+    currentContactId: PropTypes.string,
     onContactClick: PropTypes.func
 }
 
@@ -15,9 +15,9 @@ const defaultProps = {
     contacts: []
 }
 
-const ContactList = ({ contacts, selectedContactId, onContactClick }) => {
+const ContactList = ({ contacts, currentContactId, onContactClick }) => {
 
-    const isCurrent = (contactId) => contactId === selectedContactId;
+    const isCurrent = (contactId) => contactId === currentContactId;
     
     return (
         <div className="contact-list">

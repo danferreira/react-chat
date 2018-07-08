@@ -26,7 +26,7 @@ class ContactListContainer extends Component {
 const mapStateToProps = (state) => {
     return {
         contacts: getOrderedContactList(state),
-        currentContactId: state.current
+        currentContactId: state.contact.current
     }
 }
 

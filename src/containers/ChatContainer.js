@@ -6,17 +6,22 @@ import { fetchMessages, sendMessage } from '../actions/chatActions';
 import { getMessages } from '../selectors/chatSelectors';
 
 class ChatContainer extends Component {
-
     componentDidMount() {
         this.props.fetchMessages(this.props.contact.chatId);
     }
 
+    componentDidUpdate(prevProps) {
+        if(this.props.contact !== prevProps.contact) {
+            this.props.fetchMessages(this.props.contact.chatId);
+        }
+    }
     render() {
+
         return (
             <Chat
                 contact={this.props.contact}
                 messages={this.props.messages}
-                onSendMessage={this.props.sendMessage} />
+                onSendMessage={this.props.sendMessage}/>
         );
     }
 }

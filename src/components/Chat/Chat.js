@@ -14,10 +14,14 @@ const propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired
-    }))
+    })),
+    onSendMessage: PropTypes.func.isRequired,
 }
 
-const Chat = ({ contact, messages, onSendMessage }) => {
+const Chat = ({
+    contact,
+    messages,
+    onSendMessage}) => {
 
     const handleMessageSent = (message) => {
         onSendMessage(message, contact);

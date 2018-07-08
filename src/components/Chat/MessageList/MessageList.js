@@ -20,13 +20,21 @@ const defaultProps = {
 
 class MessageList extends Component {
 
+    handleScrollTop = () => {
+        // const { hasMoreItems, isLoadingMoreItems, onMoreItems } = this.props;
+
+        // if (hasMoreItems && !isLoadingMoreItems) {
+        //     onMoreItems();
+        // }
+    }
+
     render() {
         const { messages } = this.props;
-
         return (
             <div className="message-list">
                 <Loader isLoading={messages.length === 0}>
-                    <SmartScroll>
+                    <SmartScroll
+                        onScrollTop={this.handleScrollTop}>
                         {messages.map((m) =>
                             <Message
                                 message={m}

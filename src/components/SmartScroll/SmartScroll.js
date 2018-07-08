@@ -2,9 +2,18 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import './SmartScroll.css';
+import Spinner from '../Spinner/Spinner';
 
 const propTypes = {
-    children: PropTypes.node.isRequired
+    triggerAtTop: PropTypes.number,
+    triggerAtBottom: PropTypes.number,
+    onScrollTop: PropTypes.func,
+    children: PropTypes.array.isRequired,
+}
+
+const defaultProps = {
+    triggerAtTop: 100,
+    triggerAtBottom: 100
 }
 
 class SmartScroll extends PureComponent {
@@ -12,7 +21,7 @@ class SmartScroll extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.node = React.createRef();
+        this.scroller = React.createRef();
         this.state = {
             autoScroll: true,
             isScrollButtonVisible: false
@@ -23,24 +32,46 @@ class SmartScroll extends PureComponent {
         this.scrollToBottom();
     }
 
-    componentDidUpdate() {
-        if (this.state.autoScroll)
+    getSnapshotBeforeUpdate() {
+        const { scrollTop, scrollHeight } = this.scroller.current;
+
+        return scrollHeight - scrollTop;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.autoScroll) {
             this.scrollToBottom();
+            return;
+        }
+
+        let arr = this.props.children[0];
+        let prevArr = prevProps.children[0];
+
+        //keep cursor at the same position 
+        if (arr.key !== prevArr.key) {
+            this.scroller.current.scrollTop = this.scroller.current.scrollHeight - snapshot;
+        }
     }
 
     handleScroll = () => {
-        const { scrollTop, scrollHeight, offsetHeight } = this.node.current;
-        const distanceFromBottom = scrollHeight - (scrollTop + offsetHeight);
+        const { scrollTop, scrollHeight, offsetHeight } = this.scroller.current;
+        const { triggerAtTop, triggerAtBottom, onScrollTop } = this.props;
 
-        const autoScroll = distanceFromBottom <= 100;
+        if (scrollTop <= triggerAtTop && onScrollTop) {
+            onScrollTop();
+        }
+
+        const distanceFromBottom = scrollHeight - (scrollTop + offsetHeight);
+        const autoScroll = distanceFromBottom <= triggerAtBottom;
+
         this.setState({
             autoScroll,
-            isScrollButtonVisible: !autoScroll
+            isScrollButtonVisible: !autoScroll,
         });
     }
 
     scrollToBottom = () => {
-        this.node.current.scrollTop = this.node.current.scrollHeight;
+        this.scroller.current.scrollTop = this.scroller.current.scrollHeight;
     }
 
     render() {
@@ -48,8 +79,10 @@ class SmartScroll extends PureComponent {
             <div className='smart-scroll'>
                 <div
                     className='smart-scroll-content'
-                    ref={this.node}
+                    ref={this.scroller}
                     onScroll={this.handleScroll}>
+
+                    {/* {this.props.isLoadingMoreItems && <Spinner />} */}
                     {this.props.children}
                 </div>
 
@@ -66,5 +99,6 @@ class SmartScroll extends PureComponent {
 }
 
 SmartScroll.propTypes = propTypes;
+SmartScroll.defaultProps = defaultProps;
 
 export default SmartScroll;

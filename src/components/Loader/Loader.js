@@ -9,7 +9,6 @@ const propTypes = {
 }
 
 const Loader = ({ isLoading, children }) => {
-
     return isLoading
         ? <Spinner />
         : children;

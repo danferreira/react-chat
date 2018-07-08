@@ -11,7 +11,6 @@ class SignInContainer extends Component {
 
     componentWillMount() {
         if (this.props.isAuthenticated) {
-            console.log("componentwillmount", this.props);
             this.props.history.push("/home");
         }
     }

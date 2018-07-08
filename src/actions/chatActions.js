@@ -1,9 +1,15 @@
 import firebase from '../firebase';
 import * as types from './actionTypes';
+import { loadContacts } from './contactActions';
 
 export const fetchMessagesSuccess = messages => ({
     type: types.FETCH_MESSAGES_SUCCESS,
     messages
+});
+
+export const fetchNewMessagesSuccess = message => ({
+    type: types.FETCH_NEW_MESSAGES_SUCCESS,
+    message
 });
 
 export const fetchMessages = (chatId) => (dispatch, getState) => {
@@ -35,7 +41,12 @@ export const fetchMessages = (chatId) => (dispatch, getState) => {
         .ref(`/chats/${chatId}/messages`)
         .orderByChild('date')
         .startAt(Date.now())
-        .on("child_added", snapshot => dispatch(fetchMessagesSuccess(snapshot.val())));
+        .on("child_added", snapshot => dispatch(fetchNewMessagesSuccess({
+            id: snapshot.key,
+            content: snapshot.val().content,
+            date: snapshot.val().date,
+            from: snapshot.val().from
+        })));
 }
 
 export const sendMessage = (message, contact) => (dispatch, getState) => {
@@ -46,6 +57,11 @@ export const sendMessage = (message, contact) => (dispatch, getState) => {
 
 export const sendProfileMessage = (message, profileUser) => (dispatch, getState) => {
     var currentUser = getState().user;
+
+    if(!getState().contact.list) {
+        dispatch(loadContacts());
+    }
+
     var alreadyContact = getState().contact.list.filter(u => u.id === profileUser.id)[0];
 
     var chatId = alreadyContact
@@ -67,11 +83,16 @@ function sendMessageFirebase(chatId, from, to, message) {
         chatId: chatId
     }
 
-    updates[`/users-contacts/${to.id}/${from.id}`] = {
-        name: from.name,
-        last_message: message,
-        last_message_date: firebase.database.ServerValue.TIMESTAMP,
-        chatId: chatId
+    // updates[`/users-contacts/${to.id}/${from.id}`] = {
+    //     name: from.name,
+    //     last_message: message,
+    //     last_message_date: firebase.database.ServerValue.TIMESTAMP,
+    //     chatId: chatId
+    // }
+
+    updates[`/chats/${chatId}/participants/`] = {
+        [from.id]: true,
+        [to.id]: true,
     }
 
     updates[`/chats/${chatId}/messages/${msgId}`] = {
