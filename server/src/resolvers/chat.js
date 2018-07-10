@@ -27,6 +27,7 @@ export default {
                 },
                 order: [['id', 'DESC']],
                 limit: 20,
+                raw: true,
             };
 
             // await new Promise(resolve => setTimeout(() => resolve(console.log('sleep')), 2000));
@@ -37,7 +38,7 @@ export default {
                 };
             }
 
-            return models.Message.findAll(options, { raw: true });
+            return models.Message.findAll(options);
         }),
     },
     Mutation: {

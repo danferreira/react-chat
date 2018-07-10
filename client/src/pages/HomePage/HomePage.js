@@ -26,7 +26,7 @@ const HomePage = ({ contact }) => {
 }
 
 
-const mapState = (state) => {
+const mapState = (state) => { 
   return {
     contact: getCurrentContact(state),
   }

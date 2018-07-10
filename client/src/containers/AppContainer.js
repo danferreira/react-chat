@@ -47,7 +47,7 @@ class AppContainer extends Component {
                         isAuthenticating={isAuthenticating} 
                         isAuthenticated={isAuthenticated} />
                     <Route 
-                        path='/:uid' 
+                        path='/p/:id' 
                         component={ProfilePage} />
                 </Switch>
             </Router>

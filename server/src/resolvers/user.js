@@ -26,6 +26,12 @@ const getToken = payload => (
 
 export default {
     Query: {
+        getUser: (root, { userId }, { models }) => models.User.findOne({
+            where: {
+                id: userId,
+            },
+            raw: true,
+        }),
         getAllUsers: (root, args, { models }) => models.User.findAll(),
         getUserContacts: isAuthenticatedResolver.createResolver(async (root, args, { models, user }) => {
             const result = await models.sequelize.query(

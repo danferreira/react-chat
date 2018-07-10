@@ -9,13 +9,14 @@ type Contact {
 
 type User {
   id: Int!
-  name: String
+  name: String!
   email: String!,
 }
 
 type Query {
+  getUser(userId: Int!): User
   getAllUsers: [User]
-  getUserContacts: [Contact!]
+  getUserContacts: [Contact]
 }
 
 type AuthResponse {

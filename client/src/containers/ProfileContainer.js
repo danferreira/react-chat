@@ -1,54 +1,72 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { graphql, compose } from "react-apollo";
+import gql from "graphql-tag";
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import { setCurrentContact } from '../actions/contactActions'
 import Loader from '../components/Loader/Loader';
-import firebase from '../firebase'
 import Profile from '../components/Profile/Profile';
-// import { sendProfileMessage } from '../actions/chatActions';
 
-class ProfileContainer extends Component {
+const ProfileContainer = ({ userId, history, setCurrentContact, mutate, data: { loading, user } }) => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLoading: true
-        }
+    const handleMessageSent = (message) => {
+        mutate({
+            variables: {
+                receiverId: userId,
+                content: message,
+            },
+        }).then(response => {
+
+            const { success } = response.data.createMessage;
+
+            if (success) {
+                setCurrentContact(userId);
+                history.push('/home');
+            }
+        });
     }
 
-    // componentDidMount() {
-    //     const userId = this.props.match.params.uid;
-
-    //     firebase.database().ref("/users/" + userId).once("value").then(snapshot => {
-    //         if(!snapshot.val()) 
-    //             this.props.history.push("/home");;
-
-    //         this.setState(prevState => ({
-    //             user: {
-    //                 id: snapshot.key,
-    //                 name: snapshot.val().name,
-    //                 avatar: snapshot.val().avatar,
-    //                 bio: snapshot.val().bio
-    //             },
-    //             isLoading: false
-    //         }));
-    //     });
-    // }
-
-    render() {
-        return (
-            <Loader isLoading={this.state.isLoading}>
-                {/* <Profile user={this.state.user} />                 */}
-                <div>Profile</div>
-            </Loader>
-        );
-    }
+    return (
+        <Loader isLoading={loading}>
+            <Profile
+                user={user}
+                onSendMessage={handleMessageSent} />
+        </Loader>
+    );
 }
 
-// var mapDispatchToProps = {
-    // sendProfileMessage
-// }
+const GET_USER_QUERY = gql`
+query getUser($userId: Int!) {
+    user: getUser(userId: $userId) {
+        id
+        name
+        email
+    }
+}
+`
 
-// export default withRouter(connect(null, mapDispatchToProps)(ProfileContainer));
+const CREATE_MESSAGE_MUTATION = gql`
+    mutation createMessage($receiverId: Int!, $content: String!) {
+        createMessage(receiverId: $receiverId, content: $content) {
+            success
+        }
+    }
+`;
 
-export default ProfileContainer;
+const mapDispatchToProps = {
+    setCurrentContact
+}
+
+export default compose(
+    graphql(GET_USER_QUERY, {
+        options: ({ userId }) => ({
+            variables: {
+                userId
+            },
+        })
+    }),
+    graphql(CREATE_MESSAGE_MUTATION),
+    withRouter,
+    connect(null, mapDispatchToProps)
+)(ProfileContainer);

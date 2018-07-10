@@ -14,7 +14,7 @@ class ContactListContainer extends PureComponent {
     }
 
     componentDidUpdate() {
-        this.props.loadContacts(this.props.data.getUserContacts);
+        this.props.loadContacts(this.props.data.contacts);
     }
 
     componentWillUnmount() {
@@ -31,11 +31,11 @@ class ContactListContainer extends PureComponent {
     )
 
     render() {
-        const { currentContactId, setCurrentContact, data: { getUserContacts } } = this.props;
+        const { currentContactId, setCurrentContact, data: { contacts } } = this.props;
 
         return (
             <ContactList
-                contacts={getUserContacts}
+                contacts={contacts}
                 currentContactId={currentContactId}
                 onContactClick={setCurrentContact} />);
     }
@@ -54,7 +54,7 @@ const mapDispatch = {
 
 const GET_CONTACTS_QUERY = gql`
     query {
-        getUserContacts {
+        contacts: getUserContacts {
             id
             name
             lastMessage

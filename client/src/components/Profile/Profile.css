@@ -18,6 +18,11 @@
     font-size: 28px;
 }
 
+.profile .info .email {
+    text-align: center;
+    font-size: 16px;
+}
+
 .profile .info .bio {
     text-align: center;
     width: 60%;
