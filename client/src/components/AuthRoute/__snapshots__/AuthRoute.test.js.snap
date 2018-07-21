@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AuthRoute /> should render a <Spinner /> 1`] = `
+<div
+  style={
+    Object {
+      "display": "flex",
+      "height": "100vh",
+    }
+  }
+>
+  <styled.div />
+</div>
+`;

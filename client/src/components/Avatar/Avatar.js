@@ -1,7 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components';
 
-import './Avatar.css';
+const AvatarWrapper = styled.div`
+    border: solid 1px #c6c6c6;
+    cursor: pointer;
+    overflow: hidden;
+    background: white;
+    width: ${props => `${props.dimension}px`};
+    height: ${props => `${props.dimension}px`};
+    border-radius: ${props => props.rounded ? '50%' : '0'};
+`;
+
+const ImageWrapper = styled.img`
+    width: 100%;
+`;
 
 const propTypes = {
     source: PropTypes.string,
@@ -31,22 +46,24 @@ const Avatar = ({ source, size, rounded, onClick, children }) => {
         typeof size === 'number'
             ? size
             : DEFAULT_SIZES[size] || DEFAULT_SIZES.small;
-
-    var customStyle = {
-        width: dimension,
-        height: dimension,
-        borderRadius: rounded ? dimension / 2 : 0
-    }
-
     return (
-        <div className='avatar' onClick={onClick} style={customStyle}>
+        <AvatarWrapper 
+            onClick={onClick}
+            dimension={dimension}
+            rounded={rounded}>
             {source
-                ? <img src={source} alt="User Avatar" />
-                : <i className="fas fa-user"></i>
+                ? <ImageWrapper
+                    src={source}
+                    alt="User Avatar" />
+                : <FontAwesomeIcon
+                    icon={faUser}
+                    style={{
+                        width: '100%',
+                        height: '100%'
+                    }} />
             }
-            
             {children}
-        </div>
+        </AvatarWrapper>
     );
 }
 

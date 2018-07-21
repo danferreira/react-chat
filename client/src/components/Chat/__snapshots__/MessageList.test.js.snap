@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MessageList /> should render a message list 1`] = `
+<styled.div>
+  <SmartScroll
+    onScrollTop={[Function]}
+    triggerAtBottom={100}
+    triggerAtTop={100}
+  >
+    <Message
+      key="1"
+      message={
+        Object {
+          "content": "hello",
+          "id": 1,
+          "type": "out",
+        }
+      }
+    />
+    <Message
+      key="2"
+      message={
+        Object {
+          "content": "hi. How are you?",
+          "id": 2,
+          "type": "in",
+        }
+      }
+    />
+  </SmartScroll>
+</styled.div>
+`;
+
+exports[`<MessageList /> should render an empty list 1`] = `
+<styled.div>
+  <SmartScroll
+    onScrollTop={[Function]}
+    triggerAtBottom={100}
+    triggerAtTop={100}
+  />
+</styled.div>
+`;

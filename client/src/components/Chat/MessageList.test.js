@@ -12,12 +12,12 @@ describe('<MessageList />', () => {
 
     it('should render a message list', () => {
         var messages = [{
-            id: "1",
+            id: 1,
             content: "hello",
             type: "out"
         },
         {
-            id: "2",
+            id: 2,
             content: "hi. How are you?",
             type: "in"
         }];

@@ -6,13 +6,14 @@ import MessageInput from './MessageInput';
 describe('<MessageInput />', () => {
 
     it('should render properly', () => {
-        const wrapper = shallow(<MessageInput />);
+        const onSend = jest.fn();
+        const wrapper = shallow(<MessageInput onSend={onSend} />);
         expect(wrapper).toMatchSnapshot();
     })
 
     it('should call onChange function', () => {
-
-        const wrapper = mount(<MessageInput />);
+        const onSend = jest.fn();
+        const wrapper = mount(<MessageInput  onSend={onSend} />);
         const spyOnChange = jest.spyOn(wrapper.instance(), 'onChange');
         wrapper.instance().forceUpdate();
 

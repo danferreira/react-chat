@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChatHeader /> should render default image 1`] = `
+<styled.div>
+  <Avatar
+    rounded={true}
+    size="small"
+  />
+  <styled.span>
+    Dumb
+  </styled.span>
+</styled.div>
+`;
+
+exports[`<ChatHeader /> should render given image 1`] = `
+<styled.div>
+  <Avatar
+    rounded={true}
+    size="small"
+    source="img/foo.jpg"
+  />
+  <styled.span>
+    Dumb
+  </styled.span>
+</styled.div>
+`;

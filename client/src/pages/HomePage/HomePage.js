@@ -1,32 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import SidebarContainer from '../../containers/SidebarContainer';
 import NoChat from '../../components/NoChat/NoChat';
 import ChatContainer from '../../containers/ChatContainer';
 import { getCurrentContact } from '../../selectors/contactSelectors';
-import './HomePage.css';
+
+const Container = styled.div`
+    display: flex;
+`;
 
 const HomePage = ({ contact }) => {
 
   var panel = <NoChat />
-  
+
   if (contact) {
     panel = <ChatContainer contact={contact} />
   }
 
   return (
-    <div className="container">
+    <Container>
       <SidebarContainer />
 
       {panel}
 
-    </div>
+    </Container>
   );
 }
 
 
-const mapState = (state) => { 
+const mapState = (state) => {
   return {
     contact: getCurrentContact(state),
   }

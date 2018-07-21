@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import ChatHeader from './ChatHeader/ChatHeader';
-import MessageList from './MessageList/MessageList';
-import MessageInput from './MessageInput/MessageInput';
-import './Chat.css';
+import ChatHeader from './ChatHeader';
+import MessageList from './MessageList';
+import MessageInput from './MessageInput';
+
+const ChatWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100vh;
+`;
 
 const propTypes = {
     contact: PropTypes.shape({
@@ -16,23 +23,21 @@ const propTypes = {
         type: PropTypes.string.isRequired
     })),
     onSendMessage: PropTypes.func.isRequired,
-    onLoadMoreItems: PropTypes.func.isRequired,
-    hasMoreItems: PropTypes.bool.isRequired,
-    isLoadingMoreItems: PropTypes.bool.isRequired,
+    onLoadMoreItems: PropTypes.func,
+    isLoadingMoreItems: PropTypes.bool,
 }
 
-const Chat = ({ contact, messages, onSendMessage, onLoadMoreItems, hasMoreItems, isLoadingMoreItems }) => {
+const Chat = ({ contact, messages, onSendMessage, onLoadMoreItems, isLoadingMoreItems }) => {
 
     return (
-        <div className="chat">
+        <ChatWrapper>
             <ChatHeader contact={contact} />
             <MessageList 
                 messages={messages} 
                 onLoadMoreItems={onLoadMoreItems}
-                hasMoreItems={hasMoreItems}
                 isLoadingMoreItems={isLoadingMoreItems}/>
             <MessageInput onSend={onSendMessage} />
-        </div>
+        </ChatWrapper>
     );
 }
 

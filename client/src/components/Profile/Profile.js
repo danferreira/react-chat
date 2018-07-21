@@ -1,8 +1,73 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import Avatar from '../Avatar/Avatar';
-import './Profile.css';
+
+const ProfileWrapper = styled.div`
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+`;
+
+const Info = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Name = styled.label`
+    text-align: center;
+    margin-top: 20px;
+    font-size: 28px;
+`;
+
+const Email = styled.label`
+    text-align: center;
+    font-size: 16px;
+`;
+
+const BioContainer = styled.div`
+    text-align: center;
+    width: 60%;
+    margin-top: 5px;
+    font-size: 14px;
+`;
+
+const Form = styled.form`
+    width: 300px;
+`;
+
+const FormInput = styled.textarea`
+    display: block;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+    border: solid 1px #e8e8e8;
+    padding: 10px;
+    overflow: auto;
+    width: 100%;
+    margin-top: 25px;
+`;
+
+const Button = styled.button`
+    float:right;
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 4px;
+    margin-top: 5px;
+    cursor: pointer;
+
+    :hover {
+        background-color: rgb(21, 177, 21);
+    }
+`;
 
 const propTypes = {
     user: PropTypes.shape({
@@ -29,25 +94,27 @@ const Profile = ({ user, onSendMessage }) => {
     }
 
     return (
-        <div className="profile">
-            <div className="info">
+        <ProfileWrapper>
+            <Info>
                 <Avatar
                     rounded
                     size="medium"
                     source="/images/User-2.jpg" />
-                <span className="name">{user.name}</span>
-                <span className="email">{user.email}</span>
-                <div className="bio">
+                <Name>{user.name}</Name>
+                <Email>{user.email}</Email>
+                <BioContainer>
                     <p>{user.bio}</p>
-                </div>
-            </div>
-            <form
-                className="form"
-                onSubmit={handleSubmit}>
-                <textarea rows="4" ref={node => input = node} cols="50" placeholder="Remember, be nice!"></textarea>
-                <button>Send</button>
-            </form>
-        </div>
+                </BioContainer>
+            </Info>
+            <Form onSubmit={handleSubmit}>
+                <FormInput 
+                    rows="4" 
+                    cols="50"
+                    ref={node => input = node} 
+                    placeholder="Remember, be nice!" />
+                <Button>Send</Button>
+            </Form>
+        </ProfileWrapper>
     );
 }
 

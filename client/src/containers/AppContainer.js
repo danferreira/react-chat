@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import decode from 'jwt-decode';
 
-import { getIsUserAuthenticated, getIsUserAuthenticating } from '../selectors/userSelectors'
+import { getIsUserAuthenticated } from '../selectors/userSelectors'
 import AuthRoute from '../components/AuthRoute/AuthRoute';
 import UnauthRoute from '../components/UnauthRoute/UnauthRoute';
 import history from '../history';

@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import './SidebarHeader.css';
+const Header = styled.header`
+    border-bottom: 1px solid #cdcfd2;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    height: 70px;
+`;
 
 const propTypes = {
     children: PropTypes.node
 }
 
 const SidebarHeader = ({ children }) => (
-    <header className="sidebar-header">
+    <Header>
        {children}
-    </header>
+    </Header>
 );
 
 SidebarHeader.propTypes = propTypes;

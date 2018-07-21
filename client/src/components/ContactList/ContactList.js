@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-// import ContactContainer from '../../containers/ContactContainer'
-import Contact from './Contact/Contact';
-import "./ContactList.css";
+import Contact from './Contact';
+
+const List = styled.ul`
+    padding: 10px;
+`;
+
+const ListItem = styled.li`
+    border-bottom: 1px solid #cdcfd2;
+    cursor: pointer;
+`;
 
 const propTypes = {
     contacts: PropTypes.array,
@@ -17,18 +25,18 @@ const defaultProps = {
 
 const ContactList = ({ contacts, currentContactId, onContactClick }) => {
     return (
-        <div className="contact-list">
+        <div>
             {contacts.length > 0 ?
-                <ul>
+                <List>
                     {contacts.map(c =>
-                        <li key={c.id}>
+                        <ListItem key={c.id}>
                             <Contact
                                 contact={c}
                                 isCurrent={c.id === currentContactId}
                                 onClick={onContactClick} />
-                        </li>
+                        </ListItem>
                     )}
-                </ul> :
+                </List> :
                 <span>No contacts yet...</span>                
             }
         </div>

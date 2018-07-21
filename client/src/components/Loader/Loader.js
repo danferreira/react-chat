@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import Spinner from '../Spinner/Spinner';
+
+const Wrapper = styled.div`
+    display: flex;
+    height: 100vh;
+`;
 
 const propTypes = {
     isLoading: PropTypes.bool.isRequired,
@@ -11,7 +17,9 @@ const propTypes = {
 const Loader = ({ isLoading, children }) => {
 
     return isLoading
-        ? <Spinner />
+        ? <Wrapper>
+            <Spinner />
+        </Wrapper>
         : children;
 }
 

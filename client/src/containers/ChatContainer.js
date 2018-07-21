@@ -117,13 +117,17 @@ class ChatContainer extends Component {
             date: m.created_at,
         })).reverse();
 
+        let loadMoreItems = null;
+        if(hasMoreItems) {
+            loadMoreItems = this.handleLoadMoreItems;
+        }
+
         return (
             <Chat
                 contact={contact}
                 messages={messages}
                 onSendMessage={this.handleMessageSent}
-                onLoadMoreItems={this.handleLoadMoreItems}
-                hasMoreItems={hasMoreItems}
+                onLoadMoreItems={loadMoreItems}
                 isLoadingMoreItems={isLoadingMoreItems} />
         );
     }

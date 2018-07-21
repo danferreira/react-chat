@@ -1,8 +1,39 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-import './SmartScroll.css';
 import Spinner from '../Spinner/Spinner';
+
+const SmartScrollWrapper = styled.div`
+    width: 100%;
+`;
+
+const Content = styled.div`
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+    max-height: 100%;
+    bottom: 0;
+`;
+
+const ScrollDown = styled.div`
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    background: white;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 10px 0px;
+    font-size: 25px;
+    color: #353838;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+`;
 
 const propTypes = {
     triggerAtTop: PropTypes.number,
@@ -17,15 +48,9 @@ const defaultProps = {
 }
 
 class SmartScroll extends PureComponent {
-
-    constructor(props) {
-        super(props);
-
-        this.scroller = React.createRef();
-        this.state = {
-            autoScroll: true,
-            isScrollButtonVisible: false,
-        }
+    state = {
+        autoScroll: true,
+        isScrollButtonVisible: false,
     }
 
     componentDidMount() {
@@ -33,7 +58,7 @@ class SmartScroll extends PureComponent {
     }
 
     getSnapshotBeforeUpdate() {
-        const { scrollTop, scrollHeight } = this.scroller.current;
+        const { scrollTop, scrollHeight } = this.scroller;
 
         return scrollHeight - scrollTop;
     }
@@ -49,12 +74,12 @@ class SmartScroll extends PureComponent {
 
         //keep cursor at the same position 
         if (arr.key !== prevArr.key) {
-            this.scroller.current.scrollTop = this.scroller.current.scrollHeight - snapshot;
+            this.scroller.scrollTop = this.scroller.scrollHeight - snapshot;
         }
     }
 
     handleScroll = () => {
-        const { scrollTop, scrollHeight, offsetHeight } = this.scroller.current;
+        const { scrollTop, scrollHeight, offsetHeight } = this.scroller;
         const { triggerAtTop, triggerAtBottom, onScrollTop } = this.props;
 
         if (scrollTop <= triggerAtTop && onScrollTop) {
@@ -71,29 +96,26 @@ class SmartScroll extends PureComponent {
     }
 
     scrollToBottom = () => {
-        this.scroller.current.scrollTop = this.scroller.current.scrollHeight;
+        this.scroller.scrollTop = this.scroller.scrollHeight;
     }
 
     render() {
         return (
-            <div className='smart-scroll'>
-                <div
-                    className='smart-scroll-content'
-                    ref={this.scroller}
+            <SmartScrollWrapper>
+                <Content
+                    innerRef={node => this.scroller = node}
                     onScroll={this.handleScroll}>
 
                     {this.props.isLoadingMoreItems && <Spinner />}
                     {this.props.children}
-                </div>
+                </Content>
 
                 {this.state.isScrollButtonVisible &&
-                    <div
-                        className='scroll-down'
-                        onClick={this.scrollToBottom}>
-                        <i className="fas fa-angle-down"></i>
-                    </div>
+                    <ScrollDown onClick={this.scrollToBottom}>
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    </ScrollDown>
                 }
-            </div>
+            </SmartScrollWrapper>
         );
     }
 }

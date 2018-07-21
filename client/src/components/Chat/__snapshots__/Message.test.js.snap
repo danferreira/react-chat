@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Message /> should render an "in" message 1`] = `
+<styled.div>
+  <styled.div
+    type="in"
+  >
+    <p>
+      hello
+    </p>
+    <styled.span>
+      01/01/2000 at 00:00
+    </styled.span>
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<Message /> should render an "out" message 1`] = `
+<styled.div>
+  <styled.div
+    type="out"
+  >
+    <p>
+      hello
+    </p>
+    <styled.span>
+      01/01/2000 at 00:00
+    </styled.span>
+  </styled.div>
+</styled.div>
+`;

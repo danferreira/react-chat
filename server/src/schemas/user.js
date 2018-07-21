@@ -4,6 +4,7 @@ export default gql`
 type Contact {
   id: Int!
   name: String!
+  email: String!
   lastMessage: String
 }
 

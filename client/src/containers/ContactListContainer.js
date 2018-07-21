@@ -14,7 +14,10 @@ class ContactListContainer extends PureComponent {
     }
 
     componentDidUpdate() {
-        this.props.loadContacts(this.props.data.contacts);
+        const { contacts } = this.props.data;
+        if (contacts) {
+            this.props.loadContacts(contacts);
+        }
     }
 
     componentWillUnmount() {
@@ -57,6 +60,7 @@ const GET_CONTACTS_QUERY = gql`
         contacts: getUserContacts {
             id
             name
+            email
             lastMessage
         }
     }

@@ -1,8 +1,45 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import styled from 'styled-components';
 
-import './Sidebar.css';
+const SidebarWrapper = styled.div`
+    z-index: 2;
+    position: absolute;
+    background: #fff;
+    width: 300px;
+    height: 100vh;
+    transition: transform 0.3s ease-out;
+    transform: ${props => props.docked ? 'translateX(-100%)' : 'translateX(0%)'};
+
+    @media screen and (min-width: 993px) {
+        position: relative;
+        width: 400px;
+    }
+`;
+
+const Burger = styled.div`
+    text-decoration: none;
+    color: #fff;
+    left: 10px;
+    top: 10px;
+    font-size: 1.5em;
+    position: fixed;
+    cursor: pointer;
+`;
+
+const Overlay = styled.div`
+    z-index: 1;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    background-color: rgba(0, 0, 0, 0.3);
+`;
+
 
 const propTypes = {
     children: PropTypes.node.isRequired
@@ -41,25 +78,12 @@ class Sidebar extends Component {
         const showOverlay = !this.state.docked && !mql.matches;
 
         return (
-            <div className="sidebar-container">
-                <div
-                    className={classNames({
-                        'sidebar': true,
-                        'sidebar-docked': this.state.docked
-                    })}>
+            <div>
+                <SidebarWrapper docked={this.state.docked}>
                     {children}
-                </div>
-                {this.state.docked &&
-                    <div
-                        className="burger"
-                        onClick={this.handleDockSidebar}>☰</div>
-                }
-                {showOverlay &&
-                    <div
-                        className="overlay"
-                        onClick={this.handleDockSidebar}>
-                    </div>
-                }
+                </SidebarWrapper>
+                {this.state.docked && <Burger onClick={this.handleDockSidebar}>☰</Burger>}
+                {showOverlay && <Overlay onClick={this.handleDockSidebar} />}
             </div>
 
         );

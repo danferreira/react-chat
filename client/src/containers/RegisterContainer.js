@@ -4,15 +4,63 @@ import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import { Formik, Form, Field } from 'formik';
 import { withRouter } from 'react-router-dom';
-import { connect} from 'react-redux';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 
-import {getIsUserAuthenticated} from '../selectors/userSelectors';
+import { getIsUserAuthenticated } from '../selectors/userSelectors';
 import { register } from '../actions/userActions'
+
+const FormWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    color: white;
+`;
+
+const StyledField = styled.input`
+    display: block;
+    border-radius: 2px;
+    outline: none;
+    border: solid 1px #e8e8e8;
+    padding: 2px;
+    overflow: auto;
+    width: 100%;
+    margin-top: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: ${props => props.hasErrors ? 'red' : '#e8e8e8'};
+`
+
+const FormTitle = styled.h3`
+    color: white;
+`;
+
+const Button = styled.button`
+    float: right;
+    margin-top: 10px;
+    background-color: #124ebd;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 4px;
+    margin-top: 5px;
+    cursor: pointer;
+`;
+
+const ErrorMessage = styled.span`
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+`;
 
 const RegisterSchema = Yup.object().shape({
     name: Yup.string()
-    .max(255, 'Must be no longer than 255 characters')
-    .required('Required'),
+        .max(255, 'Must be no longer than 255 characters')
+        .required('Required'),
     email: Yup.string()
         .email('Invalid email address')
         .required('Required'),
@@ -69,20 +117,45 @@ class RegisterContainer extends Component {
 
     renderForm = ({ errors, touched, isSubmitting }) => {
         return (
-            <div className="sign-form">
+            <FormWrapper>
                 <Form>
                     {errors.general && <div>{errors.general}</div>}
-                    <label className='title'>Register</label>
-                    <Field type="text" name="name" placeholder="Name" />
-                    {errors.name && touched.name && <div>{errors.name}</div>}
-                    <Field type="text" name="email" placeholder="E-mail" />
-                    {errors.email && touched.email && <div>{errors.email}</div>}
-                    <Field type="password" name="password" placeholder="Password" />
+                    <FormTitle>Register</FormTitle>
+                    <Field
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        render={({ field }) => (
+                            <StyledField
+                                placeholder="Name"
+                                hasErrors={errors.name && touched.name}
+                                {...field} />
+                        )} />
+
+                    {errors.name && touched.name && <ErrorMessage>{errors.name}</ErrorMessage>}
+                    <Field
+                        name="email"
+                        render={({ field }) => (
+                            <StyledField
+                                placeholder="E-mail"
+                                hasErrors={errors.email && touched.email}
+                                {...field} />
+                        )} />
+                    {errors.email && touched.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+                    <Field
+                        name="password"
+                        render={({ field }) => (
+                            <StyledField
+                                type="password"
+                                placeholder="Password"
+                                hasErrors={errors.password && touched.password}
+                                {...field} />
+                        )} />
                     {errors.password &&
-                        touched.password && <div>{errors.password}</div>}
-                    <button type="submit" disabled={isSubmitting}>Send</button>
+                        touched.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+                    <Button disabled={isSubmitting}>Send</Button>
                 </Form>
-            </div>
+            </FormWrapper>
         )
     }
 

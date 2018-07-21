@@ -6,9 +6,63 @@ import { Formik, Form, Field } from 'formik';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
+import styled from 'styled-components';
 
 import { getIsUserAuthenticated } from '../selectors/userSelectors';
-import { login } from '../actions/userActions'
+import { login } from '../actions/userActions';
+
+
+const FormWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    color: white;
+`;
+
+const StyledField = styled.input`
+    display: block;
+    border-radius: 2px;
+    outline: none;
+    border: solid 1px #e8e8e8;
+    padding: 2px;
+    overflow: auto;
+    width: 100%;
+    margin-top: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: ${props => props.hasErrors ? 'red' : '#e8e8e8'};
+`
+
+const FormTitle = styled.h3`
+    color: white;
+`;
+
+const Button = styled.button`
+    float: right;
+    margin-top: 10px;
+    background-color: #124ebd;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 4px;
+    margin-top: 5px;
+    cursor: pointer;
+`;
+
+const ErrorMessage = styled.span`
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+`;
+
+const RegisterLink = styled(Link)`
+    font-size: 13px;
+    color: white;
+`;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -53,7 +107,8 @@ class LoginContainer extends Component {
                     localStorage.setItem('token', token);
                     login({
                         id: user.id,
-                        name: user.name
+                        name: user.name,
+                        email: user.email
                     });
                     history.push('/home');
                 }
@@ -67,19 +122,34 @@ class LoginContainer extends Component {
 
     renderForm = ({ errors, touched, isSubmitting }) => {
         return (
-            <div className="sign-form">
+            <FormWrapper>
                 <Form>
                     {errors.general && <div>{errors.general}</div>}
-                    <label className='title'>Login</label>
-                    <Field type="text" name="email" placeholder="E-mail" />
-                    {errors.email && touched.email && <div>{errors.email}</div>}
-                    <Field type="password" name="password" placeholder="Password" />
+                    <FormTitle>Login</FormTitle>
+                    <Field 
+                        name="email"
+                        render={({ field }) => (
+                            <StyledField
+                                placeholder="E-mail"
+                                hasErrors={errors.email && touched.email}
+                                {...field} />
+                        )} />
+                    {errors.email && touched.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+                    <Field 
+                        name="password"
+                        render={({ field }) => (
+                            <StyledField
+                                type="password"
+                                placeholder="Password"
+                                hasErrors={errors.password && touched.password}
+                                {...field} />
+                        )} />
                     {errors.password &&
-                        touched.password && <div>{errors.password}</div>}
-                    <button type="submit" disabled={isSubmitting}>Send</button>
-                    <Link to='/register'>Register</Link>
+                        touched.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+                    <Button disabled={isSubmitting}>Send</Button>
+                    <RegisterLink to='/register'>Register</RegisterLink>
                 </Form>
-            </div>
+            </FormWrapper>
         )
     }
 
@@ -117,6 +187,7 @@ export default compose(
             user {
                 id
                 name
+                email
             }
             token
         }

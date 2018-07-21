@@ -38,6 +38,7 @@ export default {
                 `
                 select 
                     u.id as contact_id, 
+                    u.name as contact_name,
                     u.email as contact_email, 
                     m.last_message, 
                     m.last_message_date 
@@ -66,7 +67,8 @@ export default {
 
             return result.map(r => ({
                 id: r.contact_id,
-                name: r.contact_email,
+                name: r.contact_name,
+                email: r.contact_email,
                 lastMessage: r.last_message,
                 lastMessageDate: r.last_message_date,
             }));

@@ -21,8 +21,7 @@ describe('<AuthRoute />', () => {
 
     it('should render a <Spinner />', () => {
         const component = shallowRenderComponent(true, false);
-
-        expect(component.type).toBe(Spinner);
+        expect(component).toMatchSnapshot();
     })
 
     it('should render the Component', () => {

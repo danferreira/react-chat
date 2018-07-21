@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import SmartScroll from '../../SmartScroll/SmartScroll';
-import Message from './Message/Message';
-import './MessageList.css';
-import Spinner from '../../Spinner/Spinner';
+import SmartScroll from '../SmartScroll/SmartScroll';
+import Message from './Message';
+
+const List = styled.div`
+    background: #353838;
+    order: 2;
+    height: 100vh;
+    position: relative;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
 
 const propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
@@ -21,9 +30,9 @@ const defaultProps = {
 class MessageList extends Component {
 
     handleScrollTop = () => {
-        const { hasMoreItems, isLoadingMoreItems, onLoadMoreItems } = this.props;
+        const { isLoadingMoreItems, onLoadMoreItems } = this.props;
 
-        if (hasMoreItems && !isLoadingMoreItems) {
+        if (onLoadMoreItems && !isLoadingMoreItems) {
             onLoadMoreItems();
         }
     }
@@ -32,7 +41,7 @@ class MessageList extends Component {
         const { messages, isLoadingMoreItems } = this.props;
 
         return (
-            <div className="message-list">                
+            <List>                
                 <SmartScroll 
                     onScrollTop={this.handleScrollTop}
                     isLoadingMoreItems={isLoadingMoreItems}>
@@ -42,7 +51,7 @@ class MessageList extends Component {
                             key={m.id} />
                     )}
                 </SmartScroll>
-            </div>
+            </List>
         )
     }
 }
