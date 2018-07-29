@@ -1,57 +1,80 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Loadable from 'react-loadable';
 
 import { getIsUserAuthenticated } from '../selectors/userSelectors'
 import AuthRoute from '../components/AuthRoute/AuthRoute';
 import UnauthRoute from '../components/UnauthRoute/UnauthRoute';
 import history from '../history';
-import IndexPage from '../pages/IndexPage/IndexPage';
-import LoginPage from '../pages/LoginPage/LoginPage';
-import RegisterPage from '../pages/RegisterPage/RegisterPage';
-import SignOutPage from '../pages/SignOutPage/SignOutPage';
-import HomePage from '../pages/HomePage/HomePage';
-import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import Spinner from '../components/Spinner/Spinner';
 
-class AppContainer extends Component {
+const IndexPage = Loadable({
+    loader: () => import('../pages/IndexPage/IndexPage'),
+    loading: Spinner,
+});
 
-    render() {
-        const isAuthenticating = false;
-        const { isAuthenticated } = this.props;
+const LoginPage = Loadable({
+    loader: () => import('../pages/LoginPage/LoginPage'),
+    loading: Spinner,
+});
 
-        return (
-            <Router history={history}>
-                <Switch>
-                    <Route 
-                        exact path='/' 
-                        component={IndexPage} />
-                    <UnauthRoute 
-                        path='/login' 
-                        component={LoginPage} 
-                        isAuthenticating={isAuthenticating} 
-                        isAuthenticated={isAuthenticated} />
-                    <UnauthRoute 
-                        path='/register' 
-                        component={RegisterPage} 
-                        isAuthenticating={isAuthenticating} 
-                        isAuthenticated={isAuthenticated} />
-                    <AuthRoute 
-                        path='/signout' 
-                        component={SignOutPage} 
-                        isAuthenticating={isAuthenticating} 
-                        isAuthenticated={isAuthenticated} />
-                    <AuthRoute 
-                        path='/home' 
-                        component={HomePage} 
-                        isAuthenticating={isAuthenticating} 
-                        isAuthenticated={isAuthenticated} />
-                    <Route 
-                        path='/p/:id' 
-                        component={ProfilePage} />
-                </Switch>
-            </Router>
-        );
-    }
+const RegisterPage = Loadable({
+    loader: () => import('../pages/RegisterPage/RegisterPage'),
+    loading: Spinner,
+});
+
+const SignOutPage = Loadable({
+    loader: () => import('../pages/SignOutPage/SignOutPage'),
+    loading: Spinner,
+});
+
+const HomePage = Loadable({
+    loader: () => import('../pages/HomePage/HomePage'),
+    loading: Spinner,
+});
+
+const ProfilePage = Loadable({
+    loader: () => import('../pages/ProfilePage/ProfilePage'),
+    loading: Spinner,
+});
+
+const AppContainer = ({ isAuthenticated }) => {
+
+    const isAuthenticating = false;
+
+    return (
+        <Router history={history}>
+            <Switch>
+                <Route
+                    exact path='/'
+                    component={IndexPage} />
+                <UnauthRoute
+                    path='/login'
+                    component={LoginPage}
+                    isAuthenticating={isAuthenticating}
+                    isAuthenticated={isAuthenticated} />
+                <UnauthRoute
+                    path='/register'
+                    component={RegisterPage}
+                    isAuthenticating={isAuthenticating}
+                    isAuthenticated={isAuthenticated} />
+                <AuthRoute
+                    path='/signout'
+                    component={SignOutPage}
+                    isAuthenticating={isAuthenticating}
+                    isAuthenticated={isAuthenticated} />
+                <AuthRoute
+                    path='/home'
+                    component={HomePage}
+                    isAuthenticating={isAuthenticating}
+                    isAuthenticated={isAuthenticated} />
+                <Route
+                    path='/p/:id'
+                    component={ProfilePage} />
+            </Switch>
+        </Router>
+    );
 }
 
 
